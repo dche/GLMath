@@ -62,7 +62,11 @@ public protocol FloatVector: NumberVector, GenericFloat {
 
     associatedtype Component: BaseFloat
 
-    func dot(_ y: Self) -> Self.Component
+    var length: Component { get }
+    var normalize: Self { get }
+
+    func distance(to y: Self) -> Component
+    func dot(_ y: Self) -> Component
     func mix(_ y: Self, t: Self) -> Self
     func smoothstep(_ edge0: Self, _ edge1: Self) -> Self
 }
@@ -88,6 +92,12 @@ extension float2: FloatVector2 {
     public var fract: float2 { return simd.fract(self) }
     public var recip: float2 { return simd.recip(self) }
     public var rsqrt: float2 { return simd.rsqrt(self) }
+    public var length: Float { return simd.length(self) }
+    public var normalize: float2 { return simd.normalize(self) }
+
+    public func distance(to y: float2) -> Float {
+        return simd.distance(self, y)
+    }
 
     public func dot(_ y: float2) -> Float {
         return simd.dot(self, y)
@@ -112,6 +122,12 @@ extension float3: FloatVector3 {
     public var fract: float3 { return simd.fract(self) }
     public var recip: float3 { return simd.recip(self) }
     public var rsqrt: float3 { return simd.rsqrt(self) }
+    public var length: Float { return simd.length(self) }
+    public var normalize: float3 { return simd.normalize(self) }
+
+    public func distance(to y: float3) -> Float {
+        return simd.distance(self, y)
+    }
 
     public func dot(_ y: float3) -> Float {
         return simd.dot(self, y)
@@ -137,6 +153,12 @@ extension float4: FloatVector4 {
     public var fract: float4 { return simd.fract(self) }
     public var recip: float4 { return simd.recip(self) }
     public var rsqrt: float4 { return simd.rsqrt(self) }
+    public var length: Float { return simd.length(self) }
+    public var normalize: float4 { return simd.normalize(self) }
+
+    public func distance(to y: float4) -> Float {
+        return simd.distance(self, y)
+    }
 
     public func dot(_ y: float4) -> Float {
         return simd.dot(self, y)
@@ -160,6 +182,12 @@ extension double2: FloatVector2 {
     public var fract: double2 { return simd.fract(self) }
     public var recip: double2 { return simd.recip(self) }
     public var rsqrt: double2 { return simd.rsqrt(self) }
+    public var length: Double { return simd.length(self) }
+    public var normalize: double2 { return simd.normalize(self) }
+
+    public func distance(to y: double2) -> Double {
+        return simd.distance(self, y)
+    }
 
     public func dot(_ y: double2) -> Double {
         return simd.dot(self, y)
@@ -184,6 +212,12 @@ extension double3: FloatVector3 {
     public var fract: double3 { return simd.fract(self) }
     public var recip: double3 { return simd.recip(self) }
     public var rsqrt: double3 { return simd.rsqrt(self) }
+    public var length: Double { return simd.length(self) }
+    public var normalize: double3 { return simd.normalize(self) }
+
+    public func distance(to y: double3) -> Double {
+        return simd.distance(self, y)
+    }
 
     public func dot(_ y: double3) -> Double {
         return simd.dot(self, y)
@@ -209,6 +243,12 @@ extension double4: FloatVector4 {
     public var fract: double4 { return simd.fract(self) }
     public var recip: double4 { return simd.recip(self) }
     public var rsqrt: double4 { return simd.rsqrt(self) }
+    public var length: Double { return simd.length(self) }
+    public var normalize: double4 { return simd.normalize(self) }
+
+    public func distance(to y: double4) -> Double {
+        return simd.distance(self, y)
+    }
 
     public func dot(_ y: double4) -> Double {
         return simd.dot(self, y)
