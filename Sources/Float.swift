@@ -25,6 +25,7 @@ public protocol GenericFloat: GenericSignedNumber {
 /// Primitive float number type.
 public protocol BaseFloat: BaseNumber, GenericFloat, FloatingPoint, ExpressibleByFloatLiteral {
 
+    static var epsilon: Self { get }
     var frexp: (Self, Int) { get }
     func ldexp(_ exp: Int) -> Self
 }
@@ -58,7 +59,7 @@ extension Double: BaseFloat {
 }
 
 /// Float number vector.
-public protocol FloatVector: NumberVector, GenericFloat {
+public protocol FloatVector: NumberVector, GenericFloat, ApproxEquatable {
 
     associatedtype Component: BaseFloat
 
@@ -75,6 +76,20 @@ extension FloatVector {
 
     public static func / (lhs: Self, rhs: Component) -> Self {
         return lhs * rhs.recip
+    }
+}
+
+extension FloatVector where Component: ApproxEquatable, Component.NumberType == Component {
+
+    public typealias NumberType = Component
+
+    public func isClose(to other: Self, tolerance: Component = .epsilon) -> Bool {
+        for i in 0 ..< Self.dimension {
+            guard self[i].isClose(to: other[i], tolerance: tolerance) else {
+                return false
+            }
+        }
+        return true
     }
 }
 
