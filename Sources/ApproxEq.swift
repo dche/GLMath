@@ -9,8 +9,8 @@
 /// Approximate equatable.
 public protocol ApproxEquatable {
 
-    /// The underlying float point number type.
-    associatedtype NumberType: BaseFloat
+    /// The underlying float pointing number type.
+    associatedtype NumberType: FloatingPoint
 
     /// Approximate comparison.
     ///
@@ -31,34 +31,6 @@ infix operator ~== : ComparisonPrecedence
 extension ApproxEquatable {
 
     public static func ~== (lhs: Self, rhs: Self) -> Bool {
-        return lhs.isClose(to: rhs, tolerance: Self.NumberType.epsilon)
-    }
-}
-
-extension Float: ApproxEquatable {
-
-    public typealias NumberType = Float
-
-    public func isClose(to other: Float, tolerance: Float = .epsilon) -> Bool {
-        if other.isZero {
-            return abs(self) <= tolerance
-        }
-        let diff = abs(self - other)
-        let m = max(abs(self), abs(other))
-        return diff <= m * tolerance
-    }
-}
-
-extension Double: ApproxEquatable {
-
-    public typealias NumberType = Double
-
-    public func isClose(to other: Double, tolerance: Double = .epsilon) -> Bool {
-        if other.isZero {
-            return abs(self) <= tolerance
-        }
-        let diff = abs(self - other)
-        let m = max(abs(self), abs(other))
-        return diff <= m * tolerance
+        return lhs.isClose(to: rhs, tolerance: Self.NumberType(1).ulp)
     }
 }

@@ -13,7 +13,7 @@ import simd
 //       interface generic.
 
 /// Generic float number type.
-public protocol GenericFloat: GenericSignedNumber {
+public protocol GenericFloat: GenericSignedNumber, ApproxEquatable {
 
     var fract: Self { get }
     var recip: Self { get }
@@ -25,9 +25,22 @@ public protocol GenericFloat: GenericSignedNumber {
 /// Primitive float number type.
 public protocol BaseFloat: BaseNumber, GenericFloat, FloatingPoint, ExpressibleByFloatLiteral {
 
-    static var epsilon: Self { get }
     var frexp: (Self, Int) { get }
     func ldexp(_ exp: Int) -> Self
+}
+
+extension BaseFloat {
+
+    public typealias NumberType = Self
+
+    public func isClose(to other: Self, tolerance: Self = Self.epsilon) -> Bool {
+        if other.isZero {
+            return abs(self) <= tolerance
+        }
+        let diff = abs(self - other)
+        let m = max(abs(self), abs(other))
+        return diff <= m * tolerance
+    }
 }
 
 extension Float: BaseFloat {
@@ -59,7 +72,7 @@ extension Double: BaseFloat {
 }
 
 /// Float number vector.
-public protocol FloatVector: NumberVector, GenericFloat, ApproxEquatable {
+public protocol FloatVector: NumberVector, GenericFloat {
 
     associatedtype Component: BaseFloat
 
@@ -79,7 +92,7 @@ extension FloatVector {
     }
 }
 
-extension FloatVector where Component: ApproxEquatable, Component.NumberType == Component {
+extension FloatVector where Component.NumberType == Component {
 
     public typealias NumberType = Component
 
