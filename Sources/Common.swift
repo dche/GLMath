@@ -92,14 +92,14 @@ public func mod<T: FloatVector>(_ x: T, _ y: T.Component) -> T {
 /// In GLSL, the integer part is returned via a output parameter `i`.
 /// In _Swift_ we can return both parts using a tuple *(interger part,
 /// fractional part)*.
-public func modf<T: FloatVector>(_ x: T) -> (T, T) where T.Component == Float {
+public func modf<T: FloatVector>(_ x: T) -> (i: T, T) where T.Component == Float {
     return x.split { Darwin.modf($0) }
 }
 
 /// Returns the fractional and integer parts of `x`.
 ///
 /// Both parts will have the same sign as `x`.
-public func modf<T: FloatVector>(_ x: T) -> (T, T) where T.Component == Double {
+public func modf<T: FloatVector>(_ x: T) -> (i: T, T) where T.Component == Double {
     return x.split { Darwin.modf($0) }
 }
 
@@ -157,7 +157,8 @@ public func mix<T: BaseFloat>(_ x: T, _ y: T, _ a: Bool) -> T {
 public func mix
 <
     T: FloatVector,
-    B: Vector>(_ x: T, _ y: T, _ a: B) -> T
+    B: Vector
+>(_ x: T, _ y: T, _ a: B) -> T
     where
     B.Dim == T.Dim,
     B.Component == Bool
