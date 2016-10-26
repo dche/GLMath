@@ -25,6 +25,7 @@ public protocol GenericFloat: GenericSignedNumber, ApproxEquatable {
 /// Primitive float number type.
 public protocol BaseFloat: BaseNumber, GenericFloat, FloatingPoint, ExpressibleByFloatLiteral {
 
+    var acos: Self { get }
     var frexp: (Self, Int) { get }
     func ldexp(_ exp: Int) -> Self
 }
@@ -48,6 +49,7 @@ extension Float: BaseFloat {
     public static let zero: Float = 0
     public static let one: Float = 1
 
+    public var acos: Float { return Darwin.acos(self) }
     public var fract: Float { return self - simd.floor(self) }
     public var frexp: (Float, Int) { return simd.frexp(self) }
     public var recip: Float { return simd.recip(self) }
@@ -62,6 +64,7 @@ extension Double: BaseFloat {
     public static let zero: Double = 0
     public static let one: Double = 1
 
+    public var acos: Double { return Darwin.acos(self) }
     public var fract: Double { return self - simd.floor(self) }
     public var frexp: (Double, Int) { return simd.frexp(self) }
     public var recip: Double { return simd.recip(self) }
