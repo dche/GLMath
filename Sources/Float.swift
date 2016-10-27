@@ -13,7 +13,7 @@ import simd
 //       interface generic.
 
 /// Generic float number type.
-public protocol GenericFloat: GenericSignedNumber, ApproxEquatable {
+public protocol GenericFloat: GenericSignedNumber, ApproxEquatable, Interpolatable {
 
     var fract: Self { get }
     var recip: Self { get }
@@ -25,6 +25,9 @@ public protocol GenericFloat: GenericSignedNumber, ApproxEquatable {
 /// Primitive float number type.
 public protocol BaseFloat: BaseNumber, GenericFloat, FloatingPoint, ExpressibleByFloatLiteral {
 
+    var sin: Self { get }
+    var cos: Self { get }
+    var acos: Self { get }
     var frexp: (Self, Int) { get }
     func ldexp(_ exp: Int) -> Self
 }
@@ -41,13 +44,22 @@ extension BaseFloat {
         let m = max(abs(self), abs(other))
         return diff <= m * tolerance
     }
+
+    public func interpolate(between y: Self, t: Self) -> Self {
+        return mix(self, y, t)
+    }
 }
 
 extension Float: BaseFloat {
 
+    public typealias NumberType = Float
+
     public static let zero: Float = 0
     public static let one: Float = 1
 
+    public var sin: Float { return Darwin.sin(self) }
+    public var cos: Float { return Darwin.cos(self) }
+    public var acos: Float { return Darwin.acos(self) }
     public var fract: Float { return self - simd.floor(self) }
     public var frexp: (Float, Int) { return simd.frexp(self) }
     public var recip: Float { return simd.recip(self) }
@@ -59,9 +71,14 @@ extension Float: BaseFloat {
 
 extension Double: BaseFloat {
 
+    public typealias NumberType = Double
+
     public static let zero: Double = 0
     public static let one: Double = 1
 
+    public var sin: Double { return Darwin.sin(self) }
+    public var cos: Double { return Darwin.cos(self) }
+    public var acos: Double { return Darwin.acos(self) }
     public var fract: Double { return self - simd.floor(self) }
     public var frexp: (Double, Int) { return simd.frexp(self) }
     public var recip: Double { return simd.recip(self) }
@@ -103,6 +120,25 @@ extension FloatVector where Component.NumberType == Component {
             }
         }
         return true
+    }
+
+    public func interpolate(between y: Self, t: Component) -> Self {
+        return self.mix(y, t: Self(t))
+    }
+}
+
+extension FloatVector {
+
+    /// Geometric Slerp.
+    public func slerp(_ y: Self, t: Component) -> Self {
+        let theta = self.angle(between: y)
+        if theta ~== 0 || theta ~== .pi {
+            return self.interpolate(between: y, t: t)
+        }
+        let a = (theta - t * theta).sin
+        let b = (t * theta).sin
+        let c = (theta).sin.recip
+        return self * a * c + y * b * c
     }
 }
 

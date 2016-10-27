@@ -1,8 +1,8 @@
 
 import XCTest
 import FlatUtil
-@testable import GLMath
 import simd
+@testable import GLMath
 
 class GeomTests: XCTestCase {
 
