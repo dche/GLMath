@@ -30,6 +30,8 @@ public protocol BaseFloat: BaseNumber, GenericFloat, FloatingPoint, ExpressibleB
     var acos: Self { get }
     var frexp: (Self, Int) { get }
     func ldexp(_ exp: Int) -> Self
+
+    init (_ other: Double)
 }
 
 extension BaseFloat {
