@@ -10,5 +10,6 @@ matrix:
         #   sudo: required
 
 script:
-    - swift package build
-    - swift package test
+    - swift package update
+    - swift build
+    - swift test
