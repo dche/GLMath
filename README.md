@@ -11,7 +11,6 @@ A math library for graphics programming. The API is trying to be identical to th
 ## TODOs
 
 - [ ] Documentation with examples.
-- [ ] CI.
 - [ ] Works on Linux.
 
 ## License

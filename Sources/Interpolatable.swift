@@ -80,7 +80,6 @@ public enum UnitCurve {
                 return t2
             }
         }
-
         return { sampleY(solveX($0)) }
     }
 
