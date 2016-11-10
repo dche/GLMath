@@ -18,8 +18,6 @@ import simd
 // - `fract` of vectors,
 // - `trunc`,
 // - `ceil`,
-// - `min`,
-// - `max`,
 
 /// Returns `1.0` if `x > 0`, `0.0` if `x = 0`, or `–1.0` if `x < 0`.
 public func sign(_ x: Int32) -> Int32 {
@@ -101,6 +99,16 @@ public func modf<T: FloatVector>(_ x: T) -> (i: T, T) where T.Component == Float
 /// Both parts will have the same sign as `x`.
 public func modf<T: FloatVector>(_ x: T) -> (i: T, T) where T.Component == Double {
     return x.split { Darwin.modf($0) }
+}
+
+/// Returns `y` if `y < x`, otherwise it returns `x`.
+public func min<T: NumberVector>(_ x: T, _ y: T) -> T {
+    return x.zip(y) { min($0, $1) }
+}
+
+/// Returns `y` if `x < y`, otherwise it returns `x`.
+public func max<T: NumberVector>(_ x: T, _ y: T) -> T {
+    return x.zip(y) { max($0, $1) }
 }
 
 /// Returns `min (max (x, minVal), maxVal)`.
