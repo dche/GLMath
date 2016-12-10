@@ -42,4 +42,9 @@ extension FloatVector {
         }
         return (self.dot(y) * inversesqrt(sm)).acos
     }
+
+    /// Returns the absolute value of `self.dot(y)`.
+    public func absDot(_ y: Self) -> Component {
+        return abs(self.dot(y))
+    }
 }
