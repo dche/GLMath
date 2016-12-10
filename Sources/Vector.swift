@@ -346,6 +346,50 @@ public typealias BaseNumber = GenericNumber & Comparable
 public protocol NumberVector: GenericNumber, Vector, ExpressibleByArrayLiteral, Random {
 
     associatedtype Component: BaseNumber
+
+    static func + (lhs: Self, rhs: Component) -> Self
+
+    static func * (lhs: Self, rhs: Component) -> Self
+
+    static func / (lhs: Self, rhs: Component) -> Self
+
+    static func + (lhs: Component, rhs: Self) -> Self
+
+    static func * (lhs: Component, rhs: Self) -> Self
+
+    static func / (lhs: Component, rhs: Self) -> Self
+
+    /// The sum of all components.
+    ///
+    /// ## Example
+    /// ```
+    /// assert(vec3(1, 2, 3).sum == 6)
+    /// ```
+    var sum: Component { get }
+
+    /// The multiplies of all components.
+    ///
+    /// ## Example
+    /// ```
+    /// assert(vec3(2).product == 8)
+    /// ```
+    var product: Component { get }
+
+    /// The minimal value among all components.
+    ///
+    /// ## Example
+    /// ```
+    /// assert(vec3(1, 2, 3).min == 1)
+    /// ```
+    var min: Component { get }
+
+    /// The maximal value among all components.
+    ///
+    /// ## Example
+    /// ```
+    /// assert(vec3(1, 2, 3).max == 3)
+    /// ```
+    var max: Component { get }
 }
 
 public extension NumberVector {
@@ -390,42 +434,18 @@ public extension NumberVector {
         return rhs / lhs
     }
 
-    /// The sum of all components.
-    ///
-    /// ## Example
-    /// ```
-    /// assert(vec3(1, 2, 3).sum == 6)
-    /// ```
     var sum: Component {
         return fold(Component.zero) { $0 + $1 }
     }
 
-    /// The multiplies of all components.
-    ///
-    /// ## Example
-    /// ```
-    /// assert(vec3(2).product == 8)
-    /// ```
     var product: Component {
         return fold(Component.one) { $0 * $1 }
     }
 
-    /// The minimal value among all components.
-    ///
-    /// ## Example
-    /// ```
-    /// assert(vec3(1, 2, 3).min == 1)
-    /// ```
     var min: Component {
         return reduce { $1 < $0 ? $1 : $0 }
     }
 
-    /// The maximal value among all components.
-    ///
-    /// ## Example
-    /// ```
-    /// assert(vec3(1, 2, 3).max == 3)
-    /// ```
     var max: Component {
         return reduce { $1 > $0 ? $1 : $0 }
     }
