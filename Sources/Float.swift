@@ -145,7 +145,12 @@ extension FloatVector {
 }
 
 public typealias FloatVector2 = FloatVector & Vector2
-public typealias FloatVector3 = FloatVector & Vector3
+
+public protocol FloatVector3: FloatVector, Vector3 {
+    /// Generic `cross` method declaration.
+    func cross(_ y: Self) -> Self
+}
+
 public typealias FloatVector4 = FloatVector & Vector4
 
 public typealias vec2 = float2
@@ -205,6 +210,7 @@ extension float3: FloatVector3 {
     public func smoothstep(_ edge0: float3, _ edge1: float3) -> float3 {
         return simd.smoothstep(self, edge0: edge0, edge1: edge1)
     }
+    public func cross(_ y: float3) -> float3 { return simd.cross(self, y) }
 }
 
 public typealias vec4 = float4
@@ -295,6 +301,7 @@ extension double3: FloatVector3 {
     public func smoothstep(_ edge0: double3, _ edge1: double3) -> double3 {
         return simd.smoothstep(self, edge0: edge0, edge1: edge1)
     }
+    public func cross(_ y: double3) -> double3 { return simd.cross(self, y) }
 }
 
 public typealias dvec4 = double4
