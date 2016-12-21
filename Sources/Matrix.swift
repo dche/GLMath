@@ -12,7 +12,7 @@ import simd
 /// Generic matrix type.
 ///
 /// A matrix is treated as vector of vectors of float number.
-public protocol GenericMatrix: Vector {
+public protocol GenericMatrix: Vector, ApproxEquatable {
 
     associatedtype Component: FloatVector
 
@@ -45,6 +45,23 @@ public extension GenericMatrix {
     var y: Component {
         get { return self[1] }
         set { self[1] = newValue }
+    }
+}
+
+extension GenericMatrix where Self.NumberType == Component.NumberType {
+
+    // TODO: This pattern applies to all vectors whose `Component` is
+    //       `AproxEquatable`.
+    // SWIFT EVOLUTION: Swift can't express type contraint as complex as this.
+    //                  But `Rust` can!
+
+    public func isClose(to: Self, tolerance: Self.NumberType) -> Bool {
+        for i in 0 ..< Self.dimension {
+            guard self[i].isClose(to: to[i], tolerance: tolerance) else {
+                return false
+            }
+        }
+        return true
     }
 }
 
@@ -120,6 +137,7 @@ extension float2x2: Vector2, GenericSquareMatrix {
 
     public typealias Component = vec2
     public typealias Dim = Dimension2
+    public typealias NumberType = Float
 }
 
 public typealias mat2 = float2x2
@@ -129,6 +147,7 @@ extension float2x3: Vector2, GenericMatrix {
 
     public typealias Component = vec3
     public typealias Dim = Dimension2
+    public typealias NumberType = Float
 }
 
 public typealias mat2x3 = float2x3
@@ -137,6 +156,7 @@ extension float2x4: Vector2, GenericMatrix {
 
     public typealias Component = vec4
     public typealias Dim = Dimension2
+    public typealias NumberType = Float
 }
 
 public typealias mat2x4 = float2x4
@@ -145,6 +165,7 @@ extension double2x2: Vector2, GenericSquareMatrix {
 
     public typealias Component = dvec2
     public typealias Dim = Dimension2
+    public typealias NumberType = Double
 }
 
 public typealias dmat2 = double2x2
@@ -154,6 +175,7 @@ extension double2x3: Vector2, GenericMatrix {
 
     public typealias Component = dvec3
     public typealias Dim = Dimension2
+    public typealias NumberType = Double
 }
 
 public typealias dmat2x3 = double2x3
@@ -162,6 +184,7 @@ extension double2x4: Vector2, GenericMatrix {
 
     public typealias Component = dvec4
     public typealias Dim = Dimension2
+    public typealias NumberType = Double
 }
 
 public typealias dmat2x4 = double2x4
@@ -171,6 +194,7 @@ extension float3x3: Vector3, GenericSquareMatrix {
     public typealias Component = vec3
     public typealias Dim = Dimension3
     public typealias AssociatedVector2 = float2x3
+    public typealias NumberType = Float
 }
 
 public typealias mat3 = float3x3
@@ -181,6 +205,7 @@ extension float3x2: Vector3, GenericMatrix {
     public typealias Component = vec2
     public typealias Dim = Dimension3
     public typealias AssociatedVector2 = float2x2
+    public typealias NumberType = Float
 }
 
 public typealias mat3x2 = float3x2
@@ -190,6 +215,7 @@ extension float3x4: Vector3, GenericMatrix {
     public typealias Component = vec4
     public typealias Dim = Dimension3
     public typealias AssociatedVector2 = float2x4
+    public typealias NumberType = Float
 }
 
 public typealias mat3x4 = float3x4
@@ -199,6 +225,7 @@ extension double3x3: Vector3, GenericSquareMatrix {
     public typealias Component = dvec3
     public typealias Dim = Dimension3
     public typealias AssociatedVector2 = double2x3
+    public typealias NumberType = Double
 }
 
 public typealias dmat3 = double3x3
@@ -209,6 +236,7 @@ extension double3x2: Vector3, GenericMatrix {
     public typealias Component = dvec2
     public typealias Dim = Dimension3
     public typealias AssociatedVector2 = double2x2
+    public typealias NumberType = Double
 }
 
 public typealias dmat3x2 = double3x2
@@ -218,6 +246,7 @@ extension double3x4: Vector3, GenericMatrix {
     public typealias Component = dvec4
     public typealias Dim = Dimension3
     public typealias AssociatedVector2 = double2x4
+    public typealias NumberType = Double
 }
 
 public typealias dmat3x4 = double3x4
@@ -228,6 +257,7 @@ extension float4x4: Vector4, GenericSquareMatrix {
     public typealias Dim = Dimension3
     public typealias AssociatedVector2 = float2x4
     public typealias AssociatedVector3 = float3x4
+    public typealias NumberType = Float
 
     public var determinant: Float {
         return simd.matrix_determinant(self.cmatrix)
@@ -243,6 +273,7 @@ extension float4x2: Vector4, GenericMatrix {
     public typealias Dim = Dimension4
     public typealias AssociatedVector2 = float2x2
     public typealias AssociatedVector3 = float3x2
+    public typealias NumberType = Float
 }
 
 public typealias mat4x2 = float4x2
@@ -253,6 +284,7 @@ extension float4x3: Vector4, GenericMatrix {
     public typealias Dim = Dimension4
     public typealias AssociatedVector2 = float2x3
     public typealias AssociatedVector3 = float3x3
+    public typealias NumberType = Float
 }
 
 public typealias mat4x3 = float4x3
@@ -263,6 +295,7 @@ extension double4x4: Vector4, GenericSquareMatrix {
     public typealias Dim = Dimension4
     public typealias AssociatedVector2 = double2x4
     public typealias AssociatedVector3 = double3x4
+    public typealias NumberType = Double
 
     public var determinant: Double {
         return simd.matrix_determinant(self.cmatrix)
@@ -278,6 +311,7 @@ extension double4x2: Vector4, GenericMatrix {
     public typealias Dim = Dimension4
     public typealias AssociatedVector2 = double2x2
     public typealias AssociatedVector3 = double3x2
+    public typealias NumberType = Double
 }
 
 public typealias dmat4x2 = double4x2
@@ -288,6 +322,7 @@ extension double4x3: Vector4, GenericMatrix {
     public typealias Dim = Dimension4
     public typealias AssociatedVector2 = double2x3
     public typealias AssociatedVector3 = double3x3
+    public typealias NumberType = Double
 }
 
 public typealias dmat4x3 = double4x3

@@ -146,12 +146,34 @@ extension FloatVector {
 
 public typealias FloatVector2 = FloatVector & Vector2
 
+extension FloatVector where Self: Vector2 {
+
+    public static var x: Self { return self.init(1, 0) }
+    public static var y: Self { return self.init(0, 1) }
+}
+
 public protocol FloatVector3: FloatVector, Vector3 {
+
     /// Generic `cross` method declaration.
     func cross(_ y: Self) -> Self
 }
 
+extension FloatVector3 {
+
+    public static var x: Self { return self.init(1, 0, 0) }
+    public static var y: Self { return self.init(0, 1, 0) }
+    public static var z: Self { return self.init(0, 0, 1) }
+}
+
 public typealias FloatVector4 = FloatVector & Vector4
+
+extension FloatVector where Self: Vector4 {
+
+    public static var x: Self { return self.init(1, 0, 0, 0) }
+    public static var y: Self { return self.init(0, 1, 0, 0) }
+    public static var z: Self { return self.init(0, 0, 1, 0) }
+    public static var w: Self { return self.init(0, 0, 0, 1) }
+}
 
 public typealias vec2 = float2
 

@@ -6,6 +6,10 @@
 
 public extension BaseFloat {
 
+    static var infinity: Self {
+        return .infinity
+    }
+
     static var epsilon: Self {
         return Self(1).ulp
     }
@@ -124,6 +128,10 @@ public extension BaseFloat {
 }
 
 public extension FloatVector {
+
+    static var infinity: Self {
+        return Self.init(Self.Component.infinity)
+    }
 
     static var pi: Self {
         return Self.init(Self.Component.pi)
