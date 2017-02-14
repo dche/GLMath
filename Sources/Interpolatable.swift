@@ -6,8 +6,6 @@
 // Copyright (c) 2016 The GLMath authors.
 // Licensed under MIT License.
 
-import simd
-
 public protocol Interpolatable {
 
     associatedtype NumberType: FloatingPoint
@@ -93,16 +91,16 @@ public enum UnitCurve {
     public static let ease = unitBezier(0.25, 0.1, 0.25, 1)
 
     // very close approximation to unitBezier(0.42, 0, 1, 1)
-    public static let easeIn: (Double) -> Double = { pow($0, 1.685) }
+    public static let easeIn: (Double) -> Double = { $0.pow(1.685) }
 
     // unitBezier(0, 0, 0.58, 1)
-    public static let easeOut: (Double) -> Double = { 1.0 - pow(1.0 - $0, 1.685) }
+    public static let easeOut: (Double) -> Double = { 1.0 - (1.0 - $0).pow(1.685) }
 
     // unitBezier(0.42, 0, 0.58, 1)
     public static let easeInOut: (Double) -> Double = { t in
-        let c = pow(0.5, 1.925) * 0.5
-        if t < 0.5 { return c * pow(t, 1.925) }
-        else { return 1.0 - c * pow(1.0 - t, 1.925) }
+        let c = 0.5.pow(1.925) * 0.5
+        if t < 0.5 { return c * t.pow(1.925) }
+        else { return 1.0 - c * (1.0 - t).pow(1.925) }
     }
 
     // NOTE: Using the parameters from `http://easings.net`.

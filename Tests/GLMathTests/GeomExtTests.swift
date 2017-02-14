@@ -1,16 +1,23 @@
 
+#if os(Linux)
+    import Glibc
+#else
+    import simd
+#endif
+
 import XCTest
 import FlatUtil
-import simd
 @testable import GLMath
 
 class GeomExtTests: XCTestCase {
 
+#if !os(Linux)
     func testSquareLength() {
         XCTAssert(quickCheck(Gen<vec3>(), size: 100) { v3 in
             return v3.squareLength ~== simd.length_squared(v3)
         })
     }
+#endif
 
     func testProjection() {
         XCTAssert(quickCheck(Gen<vec3>(), Gen<vec3>(), size: 100) { va, vb in

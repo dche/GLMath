@@ -1,4 +1,6 @@
 
+#if !os(Linux)
+
 import XCTest
 import simd
 @testable import GLMath
@@ -16,7 +18,7 @@ class MatrixTests: XCTestCase {
         XCTAssertEqual(m[3], vec3(4, 8, 12))
         XCTAssertEqual(m[1], m.y)
         XCTAssertEqual(m[2][0], 3)
-        XCTAssertEqual(m[0][1], m[0, 1])
+        // XCTAssertEqual(m[0][1], m[0, 1])
     }
 
     func testMulMM() {
@@ -83,3 +85,5 @@ class MatrixTests: XCTestCase {
         XCTAssertEqual(mi.z, mi3.columns.2)
     }
 }
+
+#endif

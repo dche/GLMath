@@ -1,5 +1,5 @@
 //
-// GLMath -
+// GLMath - Consts.swift
 //
 // Copyright (c) 2016 The GLMath authors.
 // Licensed under MIT License.

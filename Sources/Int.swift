@@ -6,8 +6,6 @@
 // Copyright (c) 2016 The GLMath authors.
 // Licensed under MIT License.
 
-import simd
-
 // TODO: Review all integer related code after SE-104 (Improved Integers)
 //       is implemented.
 
@@ -48,66 +46,4 @@ extension UInt32: BaseInt {
 
 public protocol IntVector: GenericInt, NumberVector {
     associatedtype Component: BaseInt
-}
-
-public typealias uvec2 = uint2
-
-extension uint2: IntVector, Vector2 {
-
-    public typealias Dim = Dimension2
-    public typealias Component = UInt32
-}
-
-public typealias uvec3 = uint3
-
-extension uint3: IntVector, Vector3 {
-
-    public typealias Dim = Dimension3
-    public typealias Component = UInt32
-    public typealias AssociatedVector2 = uvec2
-}
-
-public typealias uvec4 = uint4
-
-extension uint4: IntVector, Vector4 {
-
-    public typealias Dim = Dimension4
-    public typealias Component = UInt32
-    public typealias AssociatedVector2 = uvec2
-    public typealias AssociatedVector3 = uvec3
-}
-
-public typealias ivec2 = int2
-
-extension int2: IntVector, Vector2, GenericSignedNumber {
-
-    public typealias Dim = Dimension2
-    public typealias Component = Int32
-
-    public static func - (lhs: int2, rhs: int2) -> int2 {
-        return lhs &- rhs
-    }
-}
-
-public typealias ivec3 = int3
-
-extension int3: IntVector, Vector3, GenericSignedNumber {
-
-    public typealias Dim = Dimension3
-    public typealias Component = Int32
-    public typealias AssociatedVector2 = int2
-
-    public static func -(lhs: int3, rhs: int3) -> int3 {
-        return lhs &- rhs
-    }
-}
-
-public typealias ivec4 = int4
-
-extension int4: IntVector, Vector4, GenericSignedNumber {
-
-    public typealias Dim = Dimension4
-    public typealias Component = Int32
-    public typealias AssociatedVector2 = int2
-    public typealias AssociatedVector3 = int3
 }

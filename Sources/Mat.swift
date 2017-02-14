@@ -6,9 +6,6 @@
 // Copyright (c) 2016 The GLMath authors.
 // Licensed under MIT License.
 
-import Darwin
-import simd
-
 /// Multiply matrix `x` by matrix `y` component-wise, i.e., `result[i][j]` is
 /// the scalar product of `x[i][j]` and `y[i][j]`.
 ///
@@ -34,7 +31,7 @@ public func outerProduct
     C.Component == R.Component,
     M.Component == C,
     M.Dim == R.Dim
- {
+{
     var m = [C]()
     for i in 0 ..< R.dimension {
         m.append(c * r[i])

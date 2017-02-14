@@ -6,8 +6,6 @@
 // Copyright (c) 2016 The GLMath authors.
 // Licensed under MIT License.
 
-import Darwin
-
 func map2
 <
     T: NumberVector,

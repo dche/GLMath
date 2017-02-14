@@ -1,6 +1,5 @@
 
 import XCTest
-import simd
 import FlatUtil
 @testable import GLMath
 

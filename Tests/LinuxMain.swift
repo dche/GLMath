@@ -1,6 +1,11 @@
 import XCTest
-@testable import FlatUtilTests
+@testable import GLMathTests
+
+extension VectorTests {
+    static let allTests: [(String, (VectorTests) -> () throws -> ())] = [
+    ]
+}
 
 XCTMain([
-     testCase(FlatUtilTests.allTests),
+     testCase(VectorTests.allTests),
 ])

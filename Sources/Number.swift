@@ -6,6 +6,8 @@
 // Copyright (c) 2016 The GLMath authors.
 // Licensed under MIT License.
 
+import FlatUtil
+
 /// Additive group.
 public protocol Zero: Equatable {
 
@@ -45,10 +47,13 @@ public extension One {
 }
 
 /// Generic number type. Instances includes both scalars and vectors.
-public protocol GenericNumber: Zero, One {
+public protocol GenericNumber: Zero, One, Random {
 
     static func / (lhs: Self, rhs: Self) -> Self
 }
+
+/// Marker type of primitive number types.
+public typealias BaseNumber = GenericNumber & Comparable
 
 /// Number types that have sign.
 ///

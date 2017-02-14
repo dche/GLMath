@@ -1,6 +1,11 @@
 
+#if os(Linux)
+    import Glibc
+#else
+    import simd
+#endif
+
 import XCTest
-import simd
 import FlatUtil
 @testable import GLMath
 
@@ -180,7 +185,7 @@ class CommonTests: XCTestCase {
     func testIsNaN() {
         let nan = Float.nan
         XCTAssert(isnan(nan))
-        let v = float3(nan, 1, -0)
+        let v = vec3(nan, 1, -0)
         let bv: bvec3 = isnan(v)
         XCTAssertEqual(bv, bvec3(true, false, false))
     }

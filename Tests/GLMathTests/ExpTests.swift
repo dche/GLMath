@@ -1,6 +1,11 @@
 
+#if os(Linux)
+    import Glibc
+#else
+    import simd
+#endif
+
 import XCTest
-import simd
 @testable import GLMath
 
 class ExpTests: XCTestCase {
