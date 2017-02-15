@@ -10,24 +10,6 @@
 
 import Glibc
 
-/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
-///
-/// Results are undefined if `x < 0`.
-///
-/// Results are undefined if `x = 0` and `y ≤ 0`.
-public func pow<T: FloatVector>(_ x: T, _ y: T) -> T where T.Component == Float {
-    return x.zip(y, Glibc.pow)
-}
-
-/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
-///
-/// Results are undefined if `x < 0`.
-///
-/// Results are undefined if `x = 0` and `y ≤ 0`.
-public func pow<T: FloatVector>(_ x: T, _ y: T) -> T where T.Component == Double {
-    return x.zip(y, Glibc.pow)
-}
-
 /// Returns the natural exponentiation of `x`. i.e., *e<sup>x</sup>*.
 public func exp<T: FloatVector>(_ x: T) -> T where T.Component == Float {
     return x.map(Glibc.exp)
@@ -90,24 +72,6 @@ public func sqrt<T: FloatVector>(_ x: T) -> T where T.Component == Double {
 
 import Darwin
 
-/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
-///
-/// Results are undefined if `x < 0`.
-///
-/// Results are undefined if `x = 0` and `y ≤ 0`.
-public func pow<T: FloatVector>(_ x: T, _ y: T) -> T where T.Component == Float {
-    return x.zip(y, Darwin.pow)
-}
-
-/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
-///
-/// Results are undefined if `x < 0`.
-///
-/// Results are undefined if `x = 0` and `y ≤ 0`.
-public func pow<T: FloatVector>(_ x: T, _ y: T) -> T where T.Component == Double {
-    return x.zip(y, Darwin.pow)
-}
-
 /// Returns the natural exponentiation of `x`. i.e., *e<sup>x</sup>*.
 public func exp<T: FloatVector>(_ x: T) -> T where T.Component == Float {
     return x.map(Darwin.exp)
@@ -167,6 +131,24 @@ public func sqrt<T: FloatVector>(_ x: T) -> T where T.Component == Double {
 }
 
 #endif
+
+/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
+///
+/// Results are undefined if `x < 0`.
+///
+/// Results are undefined if `x = 0` and `y ≤ 0`.
+public func pow<T: BaseFloat>(_ x: T, _ y: T) -> T {
+    return x.pow(y)
+}
+
+/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
+///
+/// Results are undefined if `x < 0`.
+///
+/// Results are undefined if `x = 0` and `y ≤ 0`.
+public func pow<T: FloatVector>(_ x: T, _ y: T) -> T {
+    return x.zip(y, pow)
+}
 
 /// Returns the inverse of the square root of `x`. i.e., the value `1/sqrt(x)`.
 ///
