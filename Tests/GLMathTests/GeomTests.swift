@@ -1,7 +1,12 @@
 
+#if os(Linux)
+    import Glibc
+#else
+    import simd
+#endif
+
 import XCTest
 import FlatUtil
-import simd
 @testable import GLMath
 
 class GeomTests: XCTestCase {

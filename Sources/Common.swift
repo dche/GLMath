@@ -6,8 +6,108 @@
 // Copyright (c) 2016 The GLMath authors.
 // Licensed under MIT License.
 
-import Darwin
+#if os(Linux)
+
+import Glibc
+
+/// Returns `x`` if `x >= 0`, otherwise it returns `–x`.
+public func abs<T: NumberVector>(_ x: T) -> T where T.Component: SignedNumber {
+    return x.map(abs)
+}
+
+/// Returns `1.0`` if `x > 0`, `0.0` if `x = 0`, or `–1.0`` if `x < 0`.
+public func sign<T: BaseFloat>(_ x: T) -> T {
+    if x.isZero { return T.zero }
+    switch x.sign {
+    case .plus: return T.one
+    case .minus: return -T.one
+    }
+}
+
+/// Returns `1.0`` if `x > 0`, `0.0` if `x = 0`, or `–1.0`` if `x < 0`.
+public func sign<T: FloatVector>(_ x: T) -> T {
+    return x.map(sign)
+}
+
+/// Returns a value equal to the nearest integer that is less than or equal to
+/// `x`.
+public func floor<T: FloatVector>(_ x: T) -> T {
+    return x.map(Glibc.floor)
+}
+
+/// Returns a value equal to the nearest integer to `x`` whose absolute value
+/// is not larger than the absolute value of `x`.
+public func trunc<T: FloatVector>(_ x: T) -> T {
+    return x.map(Glibc.trunc)
+}
+
+/// Returns a value equal to the nearest integer that is greater than or equal
+/// to `x`.
+public func ceil<T: FloatVector>(_ x: T) -> T {
+    return x.map(Glibc.ceil)
+}
+
+/// Returns `x – floor (x)`.
+public func fract(_ x: Float) -> Float {
+    return x.fract
+}
+
+/// Returns `x – floor (x)`.
+public func fract(_ x: Double) -> Double {
+    return x.fract
+}
+
+/// Returns `x – floor (x)`.
+public func fract<T: FloatVector>(_ x: T) -> T {
+    return x.map { $0.fract }
+}
+
+/// Returns a value equal to the nearest integer to `x`.
+///
+/// The fraction `0.5` will round in a direction chosen by the implementation,
+/// presumably the direction that is fastest. This includes the possibility
+/// that `round(x)` returns the same value as `roundEven(x)` for all values of
+/// `x`.
+public func round<T: FloatVector>(_ x: T) -> T {
+    return x.map(Glibc.round)
+}
+
+/// Returns a value equal to the nearest integer to `x`.
+///
+/// A fractional part of `0.5` will round toward the nearest even integer.
+/// (Both `3.5` and `4.5` for x will return `4.0`.)
+public func roundEven<T: BaseFloat>(_ x: T) -> T {
+    guard abs(x.fract) == 0.5 else { return round(x) }
+
+    let i = trunc(x)
+    if Glibc.fmod(i, 2) == 0.0 { return i }
+    else if i < 0.0 { return i - 1.0 }
+    else { return i + 1.0 }
+}
+
+/// Returns the fractional and integer parts of `x`.
+///
+/// Both parts will have the same sign as `x`.
+///
+/// - note:
+/// In GLSL, the integer part is returned via a output parameter `i`.
+/// In _Swift_ we can return both parts using a tuple *(interger part,
+/// fractional part)*.
+public func modf<T: FloatVector>(_ x: T) -> (i: T, T) where T.Component == Float {
+    return x.split { Glibc.modf($0) }
+}
+
+/// Returns the fractional and integer parts of `x`.
+///
+/// Both parts will have the same sign as `x`.
+public func modf<T: FloatVector>(_ x: T) -> (i: T, T) where T.Component == Double {
+    return x.split { Glibc.modf($0) }
+}
+
+#else
+
 import simd
+import Darwin
 
 // NOTE: Following functions have been defined in `Darwin` or `simd`
 //       for concrete types.
@@ -19,18 +119,6 @@ import simd
 // - `trunc`,
 // - `ceil`,
 
-/// Returns `1.0` if `x > 0`, `0.0` if `x = 0`, or `–1.0` if `x < 0`.
-public func sign(_ x: Int32) -> Int32 {
-    if x > 0 { return 1 }
-    else if x < 0 { return -1 }
-    else { return 0 }
-}
-
-/// Returns `1.0` if `x > 0`, `0.0` if `x = 0`, or `–1.0` if `x < 0`.
-public func sign<T: IntVector>(_ x: T) -> T where T.Component == Int32 {
-    return x.map(sign)
-}
-
 /// Returns a value equal to the nearest integer to `x`.
 ///
 /// The fraction `0.5` will round in a direction chosen by the implementation,
@@ -38,7 +126,7 @@ public func sign<T: IntVector>(_ x: T) -> T where T.Component == Int32 {
 /// that `round(x)` returns the same value as `roundEven(x)` for all values of
 /// `x`.
 public func round<T: FloatVector>(_ x: T) -> T {
-    return x.map { Darwin.round($0) }
+    return x.map(Darwin.round)
 }
 
 /// Returns a value equal to the nearest integer to `x`.
@@ -52,6 +140,39 @@ public func roundEven<T: BaseFloat>(_ x: T) -> T {
     if simd.fmod(i, 2) == 0.0 { return i }
     else if i < 0.0 { return i - 1.0 }
     else { return i + 1.0 }
+}
+
+/// Returns the fractional and integer parts of `x`.
+///
+/// Both parts will have the same sign as `x`.
+///
+/// - note:
+/// In GLSL, the integer part is returned via a output parameter `i`.
+/// In _Swift_ we can return both parts using a tuple *(interger part,
+/// fractional part)*.
+public func modf<T: FloatVector>(_ x: T) -> (i: T, T) where T.Component == Float {
+    return x.split(Darwin.modf)
+}
+
+/// Returns the fractional and integer parts of `x`.
+///
+/// Both parts will have the same sign as `x`.
+public func modf<T: FloatVector>(_ x: T) -> (i: T, T) where T.Component == Double {
+    return x.split(Darwin.modf)
+}
+
+#endif
+
+/// Returns `1.0` if `x > 0`, `0.0` if `x = 0`, or `–1.0` if `x < 0`.
+public func sign(_ x: Int32) -> Int32 {
+    if x > 0 { return 1 }
+    else if x < 0 { return -1 }
+    else { return 0 }
+}
+
+/// Returns `1.0` if `x > 0`, `0.0` if `x = 0`, or `–1.0` if `x < 0`.
+public func sign<T: IntVector>(_ x: T) -> T where T.Component == Int32 {
+    return x.map(sign)
 }
 
 /// Returns a value equal to the nearest integer to `x`.
@@ -82,33 +203,24 @@ public func mod<T: FloatVector>(_ x: T, _ y: T.Component) -> T {
     return x.map { mod($0, y) }
 }
 
-/// Returns the fractional and integer parts of `x`.
-///
-/// Both parts will have the same sign as `x`.
-///
-/// - note:
-/// In GLSL, the integer part is returned via a output parameter `i`.
-/// In _Swift_ we can return both parts using a tuple *(interger part,
-/// fractional part)*.
-public func modf<T: FloatVector>(_ x: T) -> (i: T, T) where T.Component == Float {
-    return x.split { Darwin.modf($0) }
-}
-
-/// Returns the fractional and integer parts of `x`.
-///
-/// Both parts will have the same sign as `x`.
-public func modf<T: FloatVector>(_ x: T) -> (i: T, T) where T.Component == Double {
-    return x.split { Darwin.modf($0) }
+/// Returns `y` if `y < x`, otherwise it returns `x`.
+public func min<T: NumberVector>(_ x: T, _ y: T.Component) -> T {
+    return x.map { min($0, y) }
 }
 
 /// Returns `y` if `y < x`, otherwise it returns `x`.
 public func min<T: NumberVector>(_ x: T, _ y: T) -> T {
-    return x.zip(y) { min($0, $1) }
+    return x.zip(y, min)
+}
+
+/// Returns `y` if `x < y`, otherwise it returns `x`.
+public func max<T: NumberVector>(_ x: T, _ y: T.Component) -> T {
+    return x.map { max($0, y) }
 }
 
 /// Returns `y` if `x < y`, otherwise it returns `x`.
 public func max<T: NumberVector>(_ x: T, _ y: T) -> T {
-    return x.zip(y) { max($0, $1) }
+    return x.zip(y, max)
 }
 
 /// Returns `min (max (x, minVal), maxVal)`.
@@ -381,7 +493,7 @@ public func fma<T: FloatVector>(_ a: T, _ b: T, _ c: T) -> T {
 /// For a floating-point value that is an infinity or is not a number,
 /// the results are undefined.
 ///
-/// - Note
+/// - Note:
 ///
 /// In GLSL, the significand is returned by the function and the exponent is
 /// returned in the output parameter `exp`. In Rust, we have the luxury to

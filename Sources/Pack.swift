@@ -6,8 +6,6 @@
 // Copyright (c) 2016 The GLMath authors.
 // Licensed under MIT License.
 
-import Darwin
-
 /// First, converts each component of the normalized floating-point value `v`
 /// into 16-bit integer values. Then, the results are packed into the
 /// returned 32-bit unsigned integer.

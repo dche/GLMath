@@ -6,9 +6,50 @@
 // Copyright (c) 2016 The GLMath authors.
 // Licensed under MIT License.
 
-import Darwin
+// NOTE: For Apple platforms, `cross`, `refelct` and `refract` have been
+//       defined in `simd`.
 
-// NOTE: `cross`, `refelct` and `refract` have been defined in `simd`.
+#if os(Linux)
+
+/// Returns the cross product of `x`` and `y`.
+public func cross<T: FloatVector3>(_ x: T, _ y: T) -> T {
+    return x.cross(y)
+}
+
+/// For the incident vector *I* and surface orientation *N*,
+/// returns the reflection direction:
+/// ```
+/// I – 2 ∗ dot(N, I) ∗ N
+/// ```
+///
+/// *N* must already be normalized in order to achieve the desired result.
+public func reflect<T: FloatVector>(_ i: T, _ n: T) -> T {
+    let d = i.dot(n)
+    return i - n * (d + d)
+}
+
+/// For the incident vector *I* and surface normal *N*, and the ratio of
+/// indices of refraction `eta`, return the refraction vector.
+///
+/// The result is computed by,
+/// ```
+/// k = 1.0 - eta * eta * (1.0 - dot(N, I) * dot(N, I))
+/// if (k < 0.0)
+///     return genType(0.0) // or genDType(0.0)
+/// else
+///     return eta * I - (eta * dot(N, I) + sqrt(k)) * N
+/// ```
+///
+/// The input parameters for the incident vector *I* and the surface normal *N*
+/// must already be normalized to get the desired results.
+public func refract<T: FloatVector>(_ i: T, _ n: T, _ eta: T.Component) -> T {
+    let d = i.dot(n)
+    let k = T.Component.one - eta * eta * (T.Component.one - d) * d
+    if k < T.Component.zero { return T.zero }
+    return i * eta - n * (eta * d + k.sqrt)
+}
+
+#endif
 
 /// Returns the length of vector `x`.
 public func length<T: FloatVector>(_ x: T) -> T.Component {

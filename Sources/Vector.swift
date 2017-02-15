@@ -32,7 +32,7 @@ public struct Dimension4: Dimension {
 }
 
 /// Generic vector type.
-public protocol Vector: Equatable {
+public protocol Vector: Equatable, ExpressibleByArrayLiteral {
 
     /// `Dimension` object represents the dimension of `self`.
     associatedtype Dim: Dimension
@@ -81,9 +81,6 @@ public protocol Vector: Equatable {
 
 extension Vector {
 
-    // Required by `ExpressibleByArrayLiteral`.
-    public typealias Element = Component
-
     /// Returns the dimension of the receiver as a number.
     ///
     /// ## Example
@@ -100,6 +97,13 @@ extension Vector {
             if lhs[i] != rhs[i] { return false }
         }
         return true
+    }
+}
+
+extension Vector where Element == Component {
+
+    public init (arrayLiteral: Element...) {
+        self.init(arrayLiteral)
     }
 }
 
@@ -121,6 +125,23 @@ public extension Vector2 {
 
     init (_ x: Component) {
         self.init(x, x)
+    }
+
+    public subscript (index: Int) -> Component {
+        get {
+            switch index {
+            case 0: return x
+            case 1: return y
+            default: fatalError("Index out of range 0...1.")
+            }
+        }
+        set {
+            switch index {
+            case 0: x = newValue
+            case 1: y = newValue
+            default: break
+            }
+        }
     }
 
     func map(_ fn: (Component) -> Component) -> Self {
@@ -191,6 +212,25 @@ public extension Vector3 {
         T.Component == Self.Component
     {
         self.init(x, yz.x, yz.y)
+    }
+
+    public subscript (index: Int) -> Component {
+        get {
+            switch index {
+            case 0: return x
+            case 1: return y
+            case 2: return z
+            default: fatalError("Index out of range 0...2.")
+            }
+        }
+        set {
+            switch index {
+            case 0: x = newValue
+            case 1: y = newValue
+            case 2: z = newValue
+            default: break
+            }
+        }
     }
 
     func map(_ fn: (Component) -> Component) -> Self {
@@ -310,6 +350,27 @@ public extension Vector4 {
         self.init(x, yz.x, yz.y, w)
     }
 
+    public subscript (index: Int) -> Component {
+        get {
+            switch index {
+            case 0: return x
+            case 1: return y
+            case 2: return z
+            case 3: return w
+            default: fatalError("Index out of range 0...3.")
+            }
+        }
+        set {
+            switch index {
+            case 0: x = newValue
+            case 1: y = newValue
+            case 2: z = newValue
+            case 3: w = newValue
+            default: break
+            }
+        }
+    }
+
     func map(_ fn: (Component) -> Component) -> Self {
         return Self.init(fn(self.x), fn(self.y), fn(self.z), fn(self.w))
     }
@@ -339,11 +400,8 @@ public extension Vector4 {
     }
 }
 
-/// Marker type of primitive number types.
-public typealias BaseNumber = GenericNumber & Comparable
-
 /// Generic number vector type.
-public protocol NumberVector: GenericNumber, Vector, ExpressibleByArrayLiteral, Random {
+public protocol NumberVector: GenericNumber, Vector {
 
     associatedtype Component: BaseNumber
 
@@ -399,15 +457,15 @@ public extension NumberVector {
     static var one: Self { return Self.init(Component.one) }
 
     static func + (lhs: Self, rhs: Self) -> Self {
-        return lhs.zip(rhs) { $0 + $1 }
+        return lhs.zip(rhs, +)
     }
 
     static func * (lhs: Self, rhs: Self) -> Self {
-        return lhs.zip(rhs) { $0 * $1 }
+        return lhs.zip(rhs, *)
     }
 
     static func / (lhs: Self, rhs: Self) -> Self {
-        return lhs.zip(rhs) { $0 / $1 }
+        return lhs.zip(rhs, /)
     }
 
     static func + (lhs: Self, rhs: Component) -> Self {
@@ -435,11 +493,11 @@ public extension NumberVector {
     }
 
     var sum: Component {
-        return fold(Component.zero) { $0 + $1 }
+        return fold(Component.zero, +)
     }
 
     var product: Component {
-        return fold(Component.one) { $0 * $1 }
+        return fold(Component.one, *)
     }
 
     var min: Component {

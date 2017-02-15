@@ -1,6 +1,5 @@
 
 import XCTest
-import simd
 @testable import GLMath
 
 class IntTests: XCTestCase {
