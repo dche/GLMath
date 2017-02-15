@@ -683,6 +683,12 @@ extension Mat2x2 {
         let y = Vec2<T>(rhs.y.dot(tr.x), rhs.y.dot(tr.y))
         return Mat2x2<T>(x, y)
     }
+
+    public static func * (lhs: Mat2x2<T>, rhs: Vec2<T>) -> Vec2<T> {
+        let x = lhs.x.dot(rhs)
+        let y = lhs.y.dot(rhs)
+        return Vec2<T>(x, y)
+    }
 }
 
 extension Mat3x3 {
@@ -694,6 +700,13 @@ extension Mat3x3 {
         let z = Vec3<T>(tr.x.dot(rhs.z), tr.y.dot(rhs.z), tr.z.dot(rhs.z))
         return Mat3x3<T>(x, y, z)
     }
+
+    public static func * (lhs: Mat3x3<T>, rhs: Vec3<T>) -> Vec3<T> {
+        let x = lhs.x.dot(rhs)
+        let y = lhs.y.dot(rhs)
+        let z = lhs.z.dot(rhs)
+        return Vec3<T>(x, y, z)
+    }
 }
 extension Mat4x4 {
 
@@ -704,6 +717,14 @@ extension Mat4x4 {
         let z = Vec4<T>(tr.x.dot(rhs.z), tr.y.dot(rhs.z), tr.z.dot(rhs.z), tr.w.dot(rhs.z))
         let w = Vec4<T>(tr.x.dot(rhs.w), tr.y.dot(rhs.w), tr.z.dot(rhs.w), tr.w.dot(rhs.w))
         return Mat4x4<T>(x, y, z, w)
+    }
+
+    public static func * (lhs: Mat4x4<T>, rhs: Vec4<T>) -> Vec4<T> {
+        let x = lhs.x.dot(rhs)
+        let y = lhs.y.dot(rhs)
+        let z = lhs.z.dot(rhs)
+        let w = lhs.w.dot(rhs)
+        return Vec4<T>(x, y, z, w)
     }
 }
 
