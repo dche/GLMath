@@ -1,16 +1,16 @@
 
-language: swift
-
 matrix:
     include:
         - os: osx
           osx_image: xcode8.2
+          language: swift
           script:
             - swift package update
             - swift build
             - swift test
         - os: linux
           dist: trusty
+          language: generic
           sudo: required
           before_install:
             - git clone https://github.com/IBM-Swift/Package-Builder.git
