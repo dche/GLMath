@@ -116,11 +116,11 @@ public func umulExtended
 ///
 /// The 32 most-significant bits are returned in `msb`.
 public func imulExtended(_ x: Int32, _ y: Int32) -> (lsb: Int32, msb: Int32) {
-    let ux = unsafeBitCast(x, to: UInt32.self)
-    let uy = unsafeBitCast(y, to: UInt32.self)
+    let ux = UInt32(bitPattern: x)
+    let uy = UInt32(bitPattern: y)
     let (l, m) = umulExtended(ux, uy)
-    let ix = unsafeBitCast(l, to: Int32.self)
-    let iy = unsafeBitCast(m, to: Int32.self)
+    let ix = Int32(bitPattern: l)
+    let iy = Int32(bitPattern: m)
     return (ix, iy)
 }
 
