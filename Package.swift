@@ -10,7 +10,7 @@ let package = Package(
     name: "GLMath",
     targets: [],
     dependencies: [
-        .Package(url: "../FlatUtil",
+        .Package(url: "https://github.com/dche/FlatUtil.git",
                  majorVersion: 0),
     ]
 )
