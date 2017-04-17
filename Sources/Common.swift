@@ -395,7 +395,7 @@ public func isinf
 ///
 /// The floating-point value's bit-level representation is preserved.
 public func floatBitsToInt(_ x: Float) -> Int32 {
-    return unsafeBitCast(x, to: Int32.self)
+    return Int32(bitPattern: x.bitPattern)
 }
 
 /// Returns a signed integer value representing the encoding of
@@ -416,7 +416,7 @@ public func floatBitsToInt<G: Vector, T: FloatVector>(_ value: T) -> G
 ///
 /// The floating- point value's bit-level representation is preserved.
 public func floatBitsToUint(_ x: Float) -> UInt32 {
-    return unsafeBitCast(x, to: UInt32.self)
+    return x.bitPattern
 }
 
 /// Returns a unsigned integer value representing the encoding of
@@ -439,7 +439,7 @@ public func floatBitsToUint
 /// Returns a floating-point value corresponding to a signed integer encoding
 /// of a floating-point value.
 public func intBitsToFloat(_ x: Int32) -> Float {
-    return unsafeBitCast(x, to: Float.self)
+    return Float(bitPattern: UInt32(bitPattern: x))
 }
 
 /// Returns a floating-point value corresponding to a signed integer encoding
@@ -453,14 +453,14 @@ public func intBitsToFloat
     T.Component == Int32,
     G.Component == Float,
     T.Dim == G.Dim
- {
+{
     return mapVec(value, intBitsToFloat)
 }
 
 /// Returns a floating-point value corresponding to a unsigned integer encoding
 /// of a floating-point value.
 public func uintBitsToFloat(_ x: UInt32) -> Float {
-    return unsafeBitCast(x, to: Float.self)
+    return Float(bitPattern: x)
 }
 
 /// Returns a floating-point value corresponding to a unsigned integer encoding
