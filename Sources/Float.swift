@@ -89,7 +89,7 @@ extension BaseFloat {
     }
 
     public func interpolate(_ y: Self, t: Self) -> Self {
-        return self * (Self.zero - t) + y * t
+        return self * (Self.one - t) + y * t
     }
 }
 
