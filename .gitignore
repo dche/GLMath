@@ -1,5 +1,5 @@
 .DS_Store
 .build
 .vscode
-Package.pins
+Package.resolved
 *.xcodeproj

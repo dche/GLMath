@@ -1,21 +1,13 @@
 //
 // GLMath - Consts.swift
 //
-// Copyright (c) 2016 The GLMath authors.
+// Copyright (c) 2017 The GLMath authors.
 // Licensed under MIT License.
 
 public extension BaseFloat {
 
-    static var infinity: Self {
-        return .infinity
-    }
-
     static var epsilon: Self {
-        return Self(1).ulp
-    }
-
-    static var pi: Self {
-        return 3.14159265358979323846264338327950288
+        return Self.ulpOfOne
     }
 
     static var π: Self {

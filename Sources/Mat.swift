@@ -3,7 +3,7 @@
 //
 // GLSLangSpec 8.6 Matrix Functions
 //
-// Copyright (c) 2016 The GLMath authors.
+// Copyright (c) 2017 The GLMath authors.
 // Licensed under MIT License.
 
 /// Multiply matrix `x` by matrix `y` component-wise, i.e., `result[i][j]` is
@@ -28,13 +28,15 @@ public func outerProduct
     M: GenericMatrix
 >(_ c: C, _ r: R) -> M
     where
+    // SWIFT BUG: Swift 4 thinks this constraint is redundant and does not
+    //            enforce it.
     C.Component == R.Component,
     M.Component == C,
     M.Dim == R.Dim
 {
     var m = [C]()
     for i in 0 ..< R.dimension {
-        m.append(c * r[i])
+        m.append(c * (r[i] as! C.Component))
     }
     return M(m)
 }

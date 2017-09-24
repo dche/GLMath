@@ -22,5 +22,19 @@ class MatTests: XCTestCase {
         let v2 = dvec3(3, 4, 5)
         let m: dmat3x2 = outerProduct(v1, v2)
         XCTAssertEqual(m.x, dvec2(3, 6))
+
+        // SWIFT BUG:
+
+        // This should not compile.
+
+        // let v3 = dvec2(1,2)
+        // let v4 = vec3(3,4,5)
+        // let _: dmat3x2 = outerProduct(v3, v4)
+
+        // This crashes the compiler.
+
+        // let v5 = dvec2(1,2)
+        // let v6 = dvec4(3,4,5,6)
+        // let _: dmat3x2 = outerProduct(v5, v6)
     }
 }

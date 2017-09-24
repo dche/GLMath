@@ -1,9 +1,9 @@
 //
 // GLMath - Vector.swift
 //
-// `Vector` and `NumberVector` protocols.
+// `Vector` and `NumericVector` protocols.
 //
-// Copyright (c) 2016 The GLMath authors.
+// Copyright (c) 2017 The GLMath authors.
 // Licensed under MIT License.
 
 import FlatUtil
@@ -100,9 +100,9 @@ extension Vector {
     }
 }
 
-extension Vector where Element == Component {
+extension Vector where ArrayLiteralElement == Component {
 
-    public init (arrayLiteral: Element...) {
+    public init (arrayLiteral: ArrayLiteralElement...) {
         self.init(arrayLiteral)
     }
 }
@@ -401,9 +401,7 @@ public extension Vector4 {
 }
 
 /// Generic number vector type.
-public protocol NumberVector: GenericNumber, Vector {
-
-    associatedtype Component: BaseNumber
+public protocol NumericVector: GenericNumber, Vector where Component: BaseNumber {
 
     static func + (lhs: Self, rhs: Component) -> Self
 
@@ -450,61 +448,49 @@ public protocol NumberVector: GenericNumber, Vector {
     var max: Component { get }
 }
 
-public extension NumberVector {
+extension NumericVector {
 
-    static var zero: Self { return Self.init(Component.zero) }
+    public static var zero: Self { return Self.init(Component.zero) }
 
-    static var one: Self { return Self.init(Component.one) }
+    public static var one: Self { return Self.init(Component.one) }
 
-    static func + (lhs: Self, rhs: Self) -> Self {
-        return lhs.zip(rhs, +)
-    }
-
-    static func * (lhs: Self, rhs: Self) -> Self {
-        return lhs.zip(rhs, *)
-    }
-
-    static func / (lhs: Self, rhs: Self) -> Self {
-        return lhs.zip(rhs, /)
-    }
-
-    static func + (lhs: Self, rhs: Component) -> Self {
+    public static func + (lhs: Self, rhs: Component) -> Self {
         return lhs + Self.init(rhs)
     }
 
-    static func * (lhs: Self, rhs: Component) -> Self {
+    public static func * (lhs: Self, rhs: Component) -> Self {
         return lhs * Self.init(rhs)
     }
 
-    static func / (lhs: Self, rhs: Component) -> Self {
+    public static func / (lhs: Self, rhs: Component) -> Self {
         return lhs / Self.init(rhs)
     }
 
-    static func + (lhs: Component, rhs: Self) -> Self {
+    public static func + (lhs: Component, rhs: Self) -> Self {
         return rhs + lhs
     }
 
-    static func * (lhs: Component, rhs: Self) -> Self {
+    public static func * (lhs: Component, rhs: Self) -> Self {
         return rhs * lhs
     }
 
-    static func / (lhs: Component, rhs: Self) -> Self {
+    public static func / (lhs: Component, rhs: Self) -> Self {
         return rhs / lhs
     }
 
-    var sum: Component {
+    public var sum: Component {
         return fold(Component.zero, +)
     }
 
-    var product: Component {
+    public var product: Component {
         return fold(Component.one, *)
     }
 
-    var min: Component {
+    public var min: Component {
         return reduce { $1 < $0 ? $1 : $0 }
     }
 
-    var max: Component {
+    public var max: Component {
         return reduce { $1 > $0 ? $1 : $0 }
     }
 }

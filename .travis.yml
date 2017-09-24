@@ -1,12 +1,13 @@
 
+language: swift
+
 matrix:
     include:
         - os: osx
-          osx_image: xcode8.3
-          language: swift
+          osx_image: xcode9
           script:
             - swift package update
-            - swift build
+            - swift package tools-version --set-current
             - swift test
 notifications:
     email:

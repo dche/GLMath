@@ -3,7 +3,7 @@
 //
 // GLSLangSpec 8.2 Exponential Functions
 //
-// Copyright (c) 2016 The GLMath authors.
+// Copyright (c) 2017 The GLMath authors.
 // Licensed under MIT License.
 
 #if os(Linux)
@@ -54,6 +54,33 @@ public func log2<T: FloatVector>(_ x: T) -> T where T.Component == Double {
     return x.map(Glibc.log2)
 }
 
+/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
+///
+/// Results are undefined if `x < 0`.
+///
+/// Results are undefined if `x = 0` and `y ≤ 0`.
+public func pow(_ x: Float, _ y: Float) -> Float {
+    return Glibc.powf(x, y)
+}
+
+/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
+///
+/// Results are undefined if `x < 0`.
+///
+/// Results are undefined if `x = 0` and `y ≤ 0`.
+public func pow<T: FloatVector>(_ x: T, _ y: T) -> T where T.Component == Float {
+    return x.zip(y, Glibc.powf)
+}
+
+/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
+///
+/// Results are undefined if `x < 0`.
+///
+/// Results are undefined if `x = 0` and `y ≤ 0`.
+public func pow<T: FloatVector>(_ x: T, _ y: T) -> T where T.Component == Double {
+    return x.zip(y, Glibc.pow)
+}
+
 /// Returns the square root of `x`. i.e., the value `sqrt(x)`.
 ///
 /// Results are undefined if `x < 0`.
@@ -70,7 +97,7 @@ public func sqrt<T: FloatVector>(_ x: T) -> T where T.Component == Double {
 
 #else
 
-import Darwin
+import simd
 
 /// Returns the natural exponentiation of `x`. i.e., *e<sup>x</sup>*.
 public func exp<T: FloatVector>(_ x: T) -> T where T.Component == Float {
@@ -116,6 +143,33 @@ public func log2<T: FloatVector>(_ x: T) -> T where T.Component == Double {
     return x.map(Darwin.log2)
 }
 
+/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
+///
+/// Results are undefined if `x < 0`.
+///
+/// Results are undefined if `x = 0` and `y ≤ 0`.
+public func pow(_ x: Float, _ y: Float) -> Float {
+    return Darwin.powf(x, y)
+}
+
+/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
+///
+/// Results are undefined if `x < 0`.
+///
+/// Results are undefined if `x = 0` and `y ≤ 0`.
+public func pow<T: FloatVector>(_ x: T, _ y: T) -> T where T.Component == Float {
+    return x.zip(y, simd.powf)
+}
+
+/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
+///
+/// Results are undefined if `x < 0`.
+///
+/// Results are undefined if `x = 0` and `y ≤ 0`.
+public func pow<T: FloatVector>(_ x: T, _ y: T) -> T where T.Component == Double {
+    return x.zip(y, simd.pow)
+}
+
 /// Returns the square root of `x`. i.e., the value `sqrt(x)`.
 ///
 /// Results are undefined if `x < 0`.
@@ -131,24 +185,6 @@ public func sqrt<T: FloatVector>(_ x: T) -> T where T.Component == Double {
 }
 
 #endif
-
-/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
-///
-/// Results are undefined if `x < 0`.
-///
-/// Results are undefined if `x = 0` and `y ≤ 0`.
-public func pow<T: BaseFloat>(_ x: T, _ y: T) -> T {
-    return x.pow(y)
-}
-
-/// Returns `x` raised to the `y` power, i.e., *x<sup>y</sup>*.
-///
-/// Results are undefined if `x < 0`.
-///
-/// Results are undefined if `x = 0` and `y ≤ 0`.
-public func pow<T: FloatVector>(_ x: T, _ y: T) -> T {
-    return x.zip(y, pow)
-}
 
 /// Returns the inverse of the square root of `x`. i.e., the value `1/sqrt(x)`.
 ///

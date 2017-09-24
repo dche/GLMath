@@ -3,12 +3,12 @@
 //
 // Explicit type casting.
 //
-// Copyright (c) 2016 The GLMath authors.
+// Copyright (c) 2017 The GLMath authors.
 // Licensed under MIT License.
 
-extension NumberVector {
+extension NumericVector {
 
-    /// Constructs a number vector from a boolean vector with same dimension.
+    /// Constructs a numreic vector from a boolean vector with same dimension.
     ///
     /// - parameter b: A boolean vector.
     ///
@@ -20,7 +20,7 @@ extension NumberVector {
     /// let i3 = ivec3(b3)
     /// assert(i3.x == 1 && i3.y == 1 && i3.z == 0)
     /// ```
-    public init<T: Vector>(_ b: T) where T.Dim == Self.Dim, T.Component == Bool {
+    public init<T: BoolVector>(_ b: T) where T.Dim == Self.Dim {
         var a = Self(Self.Component.zero)
         for i in 0 ..< T.dimension {
             if b[i] { a[i] = Self.Component.one }
@@ -29,4 +29,16 @@ extension NumberVector {
     }
 }
 
-// TODO: NumberVector -> BoolVector
+extension BoolVector {
+
+    /// Constructs a boolean vector from a numeric vector with same dimension.
+    ///
+    /// - parameter v: A numeric vector.
+    public init<T: NumericVector>(_ v: T) where T.Dim == Self.Dim {
+        var a = Self(true)
+        for i in 0 ..< T.dimension {
+            if v[i].isZero { a[i] = false }
+        }
+        self = a
+    }
+}

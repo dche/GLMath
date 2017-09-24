@@ -1,3 +1,4 @@
+// swift-tools-version:4.0
 //
 // GLMath - Package.swift
 //
@@ -8,9 +9,28 @@ import PackageDescription
 
 let package = Package(
     name: "GLMath",
-    targets: [],
+    products: [
+        .library(
+            name: "GLMath",
+            targets: ["GLMath"]
+        )
+    ],
     dependencies: [
-        .Package(url: "https://github.com/dche/FlatUtil.git",
-                 majorVersion: 0),
+        .package(
+            url: "https://github.com/dche/FlatUtil.git",
+            .branch("master")
+        )
+    ],
+    targets: [
+        .target(
+            name: "GLMath",
+            dependencies: ["FlatUtil"],
+            path: "Sources"
+        ),
+        .testTarget(
+            name: "GLMathTests",
+            dependencies: ["GLMath"],
+            path: "Tests/GLMathTests"
+        )
     ]
 )

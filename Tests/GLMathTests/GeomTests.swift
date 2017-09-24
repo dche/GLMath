@@ -18,7 +18,7 @@ class GeomTests: XCTestCase {
 
     func testDistance() {
         XCTAssert(quickCheck(Gen<vec2>(), Gen<vec2>(), size: 10) { v0, v1 in
-            XCTAssertEqualWithAccuracy(distance(v0, v1), length(v0 - v1), accuracy: Float.epsilon)
+            XCTAssertEqual(distance(v0, v1), length(v0 - v1), accuracy: Float.epsilon)
             return true
         })
     }
@@ -39,7 +39,7 @@ class GeomTests: XCTestCase {
     func testNormalize() {
         let v = vec2(0.6, 0.8)
         let n = normalize(vec2(3, 4))
-        XCTAssertEqualWithAccuracy(v.x, n.x, accuracy: Float.epsilon)
-        XCTAssertEqualWithAccuracy(v.y, n.y, accuracy: Float.epsilon)
+        XCTAssertEqual(v.x, n.x, accuracy: Float.epsilon)
+        XCTAssertEqual(v.y, n.y, accuracy: Float.epsilon)
     }
 }

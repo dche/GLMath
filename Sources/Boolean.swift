@@ -3,17 +3,14 @@
 //
 // Boolean vectors.
 //
-// Copyright (c) 2016 The GLMath authors.
+// Copyright (c) 2017 The GLMath authors.
 // Licensed under MIT License.
 
-public protocol BoolVector: Vector, ExpressibleByArrayLiteral {
-
-    associatedtype Component = Bool
-}
+public protocol BoolVector: Vector where Component == Bool {}
 
 public struct bvec2: Vector2, BoolVector {
 
-    public typealias Element = Bool
+    public typealias ArrayLiteralElement = Bool
 
     public var x, y: Bool
 
@@ -31,7 +28,7 @@ public struct bvec2: Vector2, BoolVector {
 
 public struct bvec3: Vector3, BoolVector {
 
-    public typealias Element = Bool
+    public typealias ArrayLiteralElement = Bool
     public typealias AssociatedVector2 = bvec2
 
     public var x, y, z: Bool
@@ -54,7 +51,7 @@ public struct bvec3: Vector3, BoolVector {
 
 public struct bvec4: Vector4, BoolVector {
 
-    public typealias Element = Bool
+    public typealias ArrayLiteralElement = Bool
     public typealias AssociatedVector2 = bvec2
     public typealias AssociatedVector3 = bvec3
 

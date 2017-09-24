@@ -3,28 +3,28 @@
 //
 // Matrix types.
 //
-// Copyright (c) 2016 The GLMath authors.
+// Copyright (c) 2017 The GLMath authors.
 // Licensed under MIT License.
 
 /// Generic matrix type.
 ///
 /// A matrix is treated as vector of vectors of float number.
-public protocol GenericMatrix: Vector, ApproxEquatable {
-
-    associatedtype Component: FloatVector
-    associatedtype NumberType = Component.NumberType
-
-    // SWIFT EVOLUTION: This can't compiled on Linux (circa 3.0.2).
-    // subscript (column: Int, row: Int) -> Component.Component { get }
+public protocol GenericMatrix: Vector, ApproxEquatable
+    where
+    Component: FloatVector,
+    InexactNumber == Component.InexactNumber
+{
+    subscript (column: Int, row: Int) -> Component.Component { get }
 
     // NOTE: Property `transpose` can't be defined here, because the result
     //       type can't be expressed on a generic way.
 }
 
 /// Generic type of square matrices.
-public protocol GenericSquareMatrix: GenericMatrix, One, Zero {
-
-    associatedtype Dim = Component.Dim
+public protocol GenericSquareMatrix: GenericMatrix, One, Zero
+    where
+    Dim == Component.Dim
+{
 
     static var identity: Self { get }
 
@@ -52,12 +52,9 @@ public extension GenericMatrix {
     }
 }
 
-extension GenericMatrix where NumberType == Component.NumberType {
+extension GenericMatrix {
 
-    // NOTE: Constraint `NumberType == Component.NumberType` is redundant,
-    //       but SWIFT (3.0.2) can't handle type relationships with indirection.
-
-    public func isClose(to: Self, tolerance: Self.NumberType) -> Bool {
+    public func isClose(to: Self, tolerance: Self.InexactNumber) -> Bool {
         for i in 0 ..< Self.dimension {
             guard self[i].isClose(to: to[i], tolerance: tolerance) else {
                 return false
@@ -100,22 +97,5 @@ public extension GenericSquareMatrix {
 
     static var zero: Self {
         return self.init(diagonal: Component.zero)
-    }
-}
-
-public extension GenericSquareMatrix where Self: Vector2, Self.Component: FloatVector2 {
-
-    var determinant: Component.Component {
-        return x.x * y.y - x.y * y.x
-    }
-}
-
-public extension GenericSquareMatrix where Self: Vector3, Self.Component: FloatVector3 {
-
-    var determinant: Component.Component {
-        let a = x.x * (y.y * z.z - z.y * y.z)
-        let b = y.x * (x.y * z.z - z.y * x.z)
-        let c = z.x * (x.y * y.z - y.y * x.z)
-        return a - b + c
     }
 }
