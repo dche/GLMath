@@ -3,7 +3,7 @@
 //
 // GLSLangSpec 8.3 Common Functions
 //
-// Copyright (c) 2016 The GLMath authors.
+// Copyright (c) 2017 The GLMath authors.
 // Licensed under MIT License.
 
 #if os(Linux)
@@ -11,7 +11,7 @@
 import Glibc
 
 /// Returns `x`` if `x >= 0`, otherwise it returns `–x`.
-public func abs<T: NumberVector>(_ x: T) -> T where T.Component: SignedNumber {
+public func abs<T: NumericVector>(_ x: T) -> T where T.Component: SignedNumber {
     return x.map(abs)
 }
 
@@ -113,7 +113,7 @@ import Darwin
 //       for concrete types.
 //
 // - `abs`,
-// - `sign`,
+// - `sign` of float vectors,
 // - `floor`,
 // - `fract` of vectors,
 // - `trunc`,
@@ -165,14 +165,12 @@ public func modf<T: FloatVector>(_ x: T) -> (i: T, T) where T.Component == Doubl
 
 /// Returns `1.0` if `x > 0`, `0.0` if `x = 0`, or `–1.0` if `x < 0`.
 public func sign(_ x: Int32) -> Int32 {
-    if x > 0 { return 1 }
-    else if x < 0 { return -1 }
-    else { return 0 }
+    return x.signum
 }
 
 /// Returns `1.0` if `x > 0`, `0.0` if `x = 0`, or `–1.0` if `x < 0`.
-public func sign<T: IntVector>(_ x: T) -> T where T.Component == Int32 {
-    return x.map(sign)
+public func sign<T: IntVector>(_ x: T) -> T where T: GenericSignedNumber {
+    return x.signum
 }
 
 /// Returns a value equal to the nearest integer to `x`.
@@ -204,22 +202,22 @@ public func mod<T: FloatVector>(_ x: T, _ y: T.Component) -> T {
 }
 
 /// Returns `y` if `y < x`, otherwise it returns `x`.
-public func min<T: NumberVector>(_ x: T, _ y: T.Component) -> T {
+public func min<T: NumericVector>(_ x: T, _ y: T.Component) -> T {
     return x.map { min($0, y) }
 }
 
 /// Returns `y` if `y < x`, otherwise it returns `x`.
-public func min<T: NumberVector>(_ x: T, _ y: T) -> T {
+public func min<T: NumericVector>(_ x: T, _ y: T) -> T {
     return x.zip(y, min)
 }
 
 /// Returns `y` if `x < y`, otherwise it returns `x`.
-public func max<T: NumberVector>(_ x: T, _ y: T.Component) -> T {
+public func max<T: NumericVector>(_ x: T, _ y: T.Component) -> T {
     return x.map { max($0, y) }
 }
 
 /// Returns `y` if `x < y`, otherwise it returns `x`.
-public func max<T: NumberVector>(_ x: T, _ y: T) -> T {
+public func max<T: NumericVector>(_ x: T, _ y: T) -> T {
     return x.zip(y, max)
 }
 
@@ -229,20 +227,19 @@ public func clamp<T: BaseNumber>(_ x: T, _ minVal: T, _ maxVal: T) -> T {
 }
 
 /// Returns `min (max (x, minVal), maxVal)`.
-public func clamp<T: NumberVector>(_ x: T, _ minVal: T, _ maxVal: T) -> T {
-    // TODO: Use `gyb` to generate functions that call `simd::clamp(:min:max)`?
-    //       Profile!
+public func clamp<T: NumericVector>(_ x: T, _ minVal: T, _ maxVal: T) -> T {
+    // TODO: Use `gyb` to generate functions that call `simd::clamp(:min:max)`.
     return x.zip(minVal, max).zip(maxVal, min)
 }
 
 /// Returns `min (max (x, minVal), maxVal)`.
-public func clamp<T: NumberVector>(_ x: T, _ minVal: T.Component, _ maxVal: T.Component) -> T {
+public func clamp<T: NumericVector>(_ x: T, _ minVal: T.Component, _ maxVal: T.Component) -> T {
     return x.map { min(max($0, minVal), maxVal) }
 }
 
 /// Returns the linear blend of `x` and `y`, i.e., `x⋅(1−a)+y⋅a`.
 public func mix<T: BaseFloat>(_ x: T, _ y: T, _ a: T) -> T {
-    return x * (1 - a) + y * a
+    return x.interpolate(y, t: a)
 }
 
 /// Returns the linear blend of `x` and `y`, i.e., `x⋅(1−a)+y⋅a`.

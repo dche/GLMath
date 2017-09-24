@@ -20,7 +20,7 @@ class ExpTests: XCTestCase {
     func testExp() {
         let e1 = dvec2(Double.e)
         let e2 = e1 * e1
-        XCTAssertEqualWithAccuracy(exp(2.0), e2.x, accuracy: Double.epsilon * 10)
+        XCTAssertEqual(exp(2.0), e2.x, accuracy: Double.epsilon * 10)
     }
 
     func testLog() {
@@ -42,6 +42,6 @@ class ExpTests: XCTestCase {
     }
 
     func testInversesqrt() {
-        XCTAssertEqualWithAccuracy(inversesqrt(vec2(64, 1)).x, 0.125, accuracy: Float.epsilon)
+        XCTAssertEqual(inversesqrt(vec2(64, 1)).x, 0.125, accuracy: Float.epsilon)
     }
 }

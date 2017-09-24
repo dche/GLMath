@@ -234,12 +234,14 @@ class CommonTests: XCTestCase {
 
     func testFma() {
         XCTAssert(quickCheck(Gen<Float>(), Gen<Float>(), Gen<Float>(), size: 100) { a, b, c in
-            XCTAssertEqualWithAccuracy(fma(a, b, c), a * b + c, accuracy: Float.epsilon)
+            XCTAssertEqual(fma(a, b, c), a * b + c, accuracy: Float.epsilon)
             return true
         })
-        XCTAssert(quickCheck(Gen<vec3>(), Gen<vec3>(), Gen<vec3>(), size: 100) { a, b, c in
-            fma(a, b, c) == a * b + c
-        })
+        let v = { (a: vec3, b: vec3, c: vec3) -> Bool in
+            return fma(a, b, c) == a * b + c
+        }
+        let qc = quickCheck(Gen<vec3>(), Gen<vec3>(), Gen<vec3>(), size: 100, spec: v)
+        XCTAssert(qc)
     }
 
     func testFrexp() {

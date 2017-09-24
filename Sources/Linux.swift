@@ -44,7 +44,6 @@ public struct IVec2<T: BaseInt>: IntVector, Vector2 {
 
     public typealias Dim = Dimension2
     public typealias Component = T
-    public typealias Element = T
 
     public var x, y: T
 
@@ -61,7 +60,6 @@ public struct IVec3<T: BaseInt>: IntVector, Vector3 {
 
     public typealias Dim = Dimension3
     public typealias Component = T
-    public typealias Element = T
     public typealias AssociatedVector2 = IVec2<T>
 
     public var x, y, z: T
@@ -82,7 +80,6 @@ public struct IVec4<T: BaseInt>: IntVector, Vector4 {
 
     public typealias Dim = Dimension4
     public typealias Component = T
-    public typealias Element = T
     public typealias AssociatedVector2 = IVec2<T>
     public typealias AssociatedVector3 = IVec3<T>
 
@@ -218,8 +215,8 @@ public struct Vec2<T: BaseFloat>: FloatVector2 {
 
     public typealias Dim = Dimension2
     public typealias Component = T
-    // For conforming to `ExpressibleByArrayLiteral`.
-    public typealias Element = T
+    public typealias InexactNumber = T
+    public typealias InterpolatableNumber = T
 
     public var x, y: T
 
@@ -240,7 +237,8 @@ public struct Vec3<T: BaseFloat>: FloatVector3 {
 
     public typealias Dim = Dimension3
     public typealias Component = T
-    public typealias Element = T
+    public typealias InexactNumber = T
+    public typealias InterpolatableNumber = T
     public typealias AssociatedVector2 = Vec2<T>
 
     public var x, y, z: T
@@ -272,7 +270,8 @@ public struct Vec4<T: BaseFloat>: FloatVector4 {
 
     public typealias Dim = Dimension4
     public typealias Component = T
-    public typealias Element = T
+    public typealias InexactNumber = T
+    public typealias InterpolatableNumber = T
     public typealias AssociatedVector2 = Vec2<T>
     public typealias AssociatedVector3 = Vec3<T>
 
@@ -310,9 +309,9 @@ public typealias dvec4 = Vec4<Double>
 
 extension GenericMatrix {
 
-    // public subscript (column: Int, row: Int) -> Component.Component {
-    //     // return self[column][row]
-    // }
+    public subscript (column: Int, row: Int) -> Component.Component {
+        return self[column][row]
+    }
 
     public static func + (lhs: Self, rhs: Self) -> Self {
         return lhs.zip(rhs, +)
@@ -326,9 +325,9 @@ extension GenericMatrix {
 public struct Mat2x2<T: BaseFloat>: Vector2, GenericSquareMatrix {
 
     public typealias Component = Vec2<T>
-    public typealias Element = Vec2<T>
     public typealias Dim = Dimension2
-    public typealias NumberType = T
+    public typealias InexactNumber = T
+    public typealias InterpolatableNumber = T
 
     public var x, y: Component
 
@@ -365,9 +364,9 @@ public struct Mat2x2<T: BaseFloat>: Vector2, GenericSquareMatrix {
 public struct Mat2<T: FloatVector>: Vector2, GenericMatrix {
 
     public typealias Component = T
-    public typealias Element = T
     public typealias Dim = Dimension2
-    public typealias NumberType = T.NumberType
+    public typealias InexactNumber = T
+    public typealias InterpolatableNumber = T
 
     public var x, y: T
 
@@ -389,10 +388,10 @@ public typealias dmat2x4 = Mat2<dvec4>
 public struct Mat3x3<T: BaseFloat>: Vector3, GenericSquareMatrix {
 
     public typealias Component = Vec3<T>
-    public typealias Element = Vec3<T>
     public typealias Dim = Dimension3
     public typealias AssociatedVector2 = Mat2<Vec3<T>>
-    public typealias NumberType = T
+    public typealias InexactNumber = T
+    public typealias InterpolatableNumber = T
 
     public var x, y, z: Component
 
@@ -448,10 +447,10 @@ public struct Mat3x3<T: BaseFloat>: Vector3, GenericSquareMatrix {
 public struct Mat3<T: FloatVector>: Vector3, GenericMatrix {
 
     public typealias Component = T
-    public typealias Element = T
     public typealias Dim = Dimension3
     public typealias AssociatedVector2 = Mat2<T>
-    public typealias NumberType = T.NumberType
+    public typealias InexactNumber = T
+    public typealias InterpolatableNumber = T
 
     public var x, y, z: T
 
@@ -476,11 +475,11 @@ public typealias dmat3x4 = Mat3<dvec4>
 public struct Mat4x4<T: BaseFloat>: Vector4, GenericSquareMatrix {
 
     public typealias Component = Vec4<T>
-    public typealias Element = Vec4<T>
     public typealias Dim = Dimension4
     public typealias AssociatedVector2 = Mat2<Vec4<T>>
     public typealias AssociatedVector3 = Mat3<Vec4<T>>
-    public typealias NumberType = T
+    public typealias InexactNumber = T
+    public typealias InterpolatableNumber = T
 
     public var x, y, z, w: Component
 
@@ -586,11 +585,11 @@ public struct Mat4x4<T: BaseFloat>: Vector4, GenericSquareMatrix {
 public struct Mat4<T: FloatVector>: Vector4, GenericMatrix {
 
     public typealias Component = T
-    public typealias Element = T
     public typealias Dim = Dimension4
     public typealias AssociatedVector2 = Mat2<T>
     public typealias AssociatedVector3 = Mat3<T>
-    public typealias NumberType = T.NumberType
+    public typealias InexactNumber = T
+    public typealias InterpolatableNumber = T
 
     public var x, y, z, w: T
 

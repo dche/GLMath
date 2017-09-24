@@ -3,17 +3,11 @@
 //
 // Integer scalars and vectors.
 //
-// Copyright (c) 2016 The GLMath authors.
+// Copyright (c) 2017 The GLMath authors.
 // Licensed under MIT License.
 
-// TODO: Review all integer related code after SE-104 (Improved Integers)
-//       is implemented.
-
-public protocol GenericInt: GenericNumber {}
-
-public protocol BaseInt: GenericInt, BaseNumber, Integer {
+public protocol BaseInt: BaseNumber, FixedWidthInteger {
     init (_ i: UInt)
-    static func >> (lhs: Self, rhs: Self) -> Self
 }
 
 extension Int32: BaseInt, GenericSignedNumber {
@@ -21,10 +15,9 @@ extension Int32: BaseInt, GenericSignedNumber {
     public static let zero: Int32 = 0
     public static let one: Int32 = 1
 
-    public var nextPow2: Int32 {
-        let s = sign(self)
-        let u = UInt32(abs(self)).nextPow2
-        return Int32(u) * s
+    // SWIFT EVOLUTION: `Int32::signum()` might be changed to a property.
+    public var signum: Int32 {
+        return self.signum()
     }
 }
 
@@ -33,7 +26,7 @@ extension UInt32: BaseInt {
     public static let zero: UInt32 = 0
     public static let one: UInt32 = 1
 
-    public var nextPow2: UInt32 {
+    public var nextPowerOf2: UInt32 {
         var v = self - 1
         v |= self >> 1
         v |= self >> 2
@@ -44,6 +37,11 @@ extension UInt32: BaseInt {
     }
 }
 
-public protocol IntVector: GenericInt, NumberVector {
-    associatedtype Component: BaseInt
+public protocol IntVector: NumericVector where Component: BaseInt {}
+
+extension IntVector where Component: GenericSignedNumber {
+
+    public var signum: Self {
+        return self.map { $0.signum }
+    }
 }

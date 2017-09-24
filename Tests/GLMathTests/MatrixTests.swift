@@ -11,6 +11,11 @@ class MatrixTests: XCTestCase {
         let m2 = mat2(1, 2, 3, 4)
         XCTAssertEqual(m2.x, vec2(1, 2))
         XCTAssertEqual(m2.y, vec2(3, 4))
+
+        let m3 = mat3(vec3(1,2,3), vec3(4,5,6), vec3(7,8,9))
+        XCTAssertEqual(m3.x, vec3(1,2,3))
+        XCTAssertEqual(m3.y, vec3(4,5,6))
+        XCTAssertEqual(m3.z, vec3(7,8,9))
     }
 
     func testSubscriptAccess() {
@@ -18,7 +23,7 @@ class MatrixTests: XCTestCase {
         XCTAssertEqual(m[3], vec3(4, 8, 12))
         XCTAssertEqual(m[1], m.y)
         XCTAssertEqual(m[2][0], 3)
-        // XCTAssertEqual(m[0][1], m[0, 1])
+        XCTAssertEqual(m[0][1], m[0, 1])
     }
 
     func testMulMM() {
@@ -68,7 +73,7 @@ class MatrixTests: XCTestCase {
         let m = mat2(1, 2, 3, 4)
         let m2 = float2x2([m.x, m.y])
         let mi = m.inverse
-        let mi2 = m2.inverse.cmatrix
+        let mi2 = m2.inverse
         XCTAssertEqual(mi.x, mi2.columns.0)
         XCTAssertEqual(mi.y, mi2.columns.1)
     }
@@ -79,7 +84,7 @@ class MatrixTests: XCTestCase {
         let m = mat3(5, 7, 11, -6, 9, 2, 1, 13, 0)
         let f33 = float3x3([m.x, m.y, m.z])
         let mi = m.inverse
-        let mi3 = f33.inverse.cmatrix
+        let mi3 = f33.inverse
         XCTAssertEqual(mi.x, mi3.columns.0)
         XCTAssertEqual(mi.y, mi3.columns.1)
         XCTAssertEqual(mi.z, mi3.columns.2)

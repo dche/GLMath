@@ -4,7 +4,7 @@ import XCTest
 
 class IntTests: XCTestCase {
 
-    func testNextPow2() {
-        XCTAssertEqual(Int32(11).nextPow2, 16)
+    func testNextPowerOf2() {
+        XCTAssertEqual(UInt32(11).nextPowerOf2, 16)
     }
 }

@@ -3,12 +3,12 @@
 //
 // GLSLangSpec 8.8 Integer Functions
 //
-// Copyright (c) 2016 The GLMath authors.
+// Copyright (c) 2017 The GLMath authors.
 // Licensed under MIT License.
 
 func map2
 <
-    T: NumberVector,
+    T: NumericVector,
     C
 >(_ x: T, _ y: T, _ fn: (C, C) -> (C, C)) -> (T, T)
     where
@@ -33,7 +33,7 @@ func map2
 /// - note:
 /// In GLSL, the carry bit is returned via the output parameter `carry`.
 public func uaddCarry(_ x: UInt32, _ y: UInt32) -> (UInt32, carry: UInt32) {
-    let (s, o) = UInt32.addWithOverflow(x, y)
+    let (s, o) = x.addingReportingOverflow(y)
     if o { return (s, 1) }
     else { return (s, 0) }
 }
@@ -46,7 +46,7 @@ public func uaddCarry(_ x: UInt32, _ y: UInt32) -> (UInt32, carry: UInt32) {
 ///
 /// - note:
 /// In GLSL, the carry bit is returned via the output parameter `carry`.
-public func uaddCarry<T: NumberVector>(_ x: T, _ y: T) -> (T, carry: T)
+public func uaddCarry<T: NumericVector>(_ x: T, _ y: T) -> (T, carry: T)
     where
     T.Component == UInt32
 {
@@ -74,7 +74,7 @@ public func usubBorrow(_ x: UInt32, _ y: UInt32) -> (UInt32, borrow: UInt32) {
 /// difference otherwise.
 ///
 /// The borrow bit is set to `0` if` x ≥ y`, or to `1` otherwise.
-public func usubBorrow<T: NumberVector>(_ x: T, _ y: T) -> (T, borrow: T)
+public func usubBorrow<T: NumericVector>(_ x: T, _ y: T) -> (T, borrow: T)
     where
     T.Component == UInt32
 {
@@ -102,7 +102,7 @@ public func umulExtended(_ x: UInt32, _ y: UInt32) -> (lsb: UInt32, msb: UInt32)
 /// The 32 most-significant bits are returned in `msb`.
 public func umulExtended
 <
-    T: NumberVector
+    T: NumericVector
 >(_ x: T, _ y: T) -> (lsb: T, msb: T)
     where
     T.Component == UInt32
@@ -131,7 +131,7 @@ public func imulExtended(_ x: Int32, _ y: Int32) -> (lsb: Int32, msb: Int32) {
 /// The 32 most-significant bits are returned in `msb`.
 public func imulExtended
 <
-    T: NumberVector
+    T: NumericVector
 >(_ x: T, _ y: T) -> (lsb: T, msb: T)
     where
     T.Component == Int32

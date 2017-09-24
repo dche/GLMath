@@ -3,7 +3,7 @@
 //
 // Generic number protocols.
 //
-// Copyright (c) 2016 The GLMath authors.
+// Copyright (c) 2017 The GLMath authors.
 // Licensed under MIT License.
 
 import FlatUtil
@@ -53,14 +53,27 @@ public protocol GenericNumber: Zero, One, Random {
 }
 
 /// Marker type of primitive number types.
-public typealias BaseNumber = GenericNumber & Comparable
+public protocol BaseNumber: GenericNumber, Comparable {}
 
 /// Number types that have sign.
 ///
-/// Much like the standard `SignedNumber` type, but with fewer constraints.
+/// Much like the standard `SignedNumeric` type.
 public protocol GenericSignedNumber: GenericNumber {
 
     static prefix func - (op: Self) -> Self
 
     static func - (lhs: Self, rhs: Self) -> Self
+
+    /// The numeric representation of the receiver's sign.
+    ///
+    /// ## Example
+    /// ```swift
+    /// import GLMath
+    ///
+    /// print(-2.signum)               // -1
+    /// print(vec2(2,0,-2).signum)     // vec2(1,0,-1)
+    /// ```
+    ///
+    /// - seealso: GLMath::sign(_:)
+    var signum: Self { get }
 }
