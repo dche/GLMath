@@ -6,9 +6,10 @@ import FlatUtil
 class InterpolationTests: XCTestCase {
 
     func testLerp() {
-        XCTAssert(quickCheck(Gen<Float>(), Gen<Float>(), Gen<Float>(), size: 100) { a, b, c in
-            return a.interpolate(b, t: c) == mix(a, b, c)
-        })
+        XCTAssertEqual(1.0.interpolate(2.0, t: 0), 1)
+        XCTAssertEqual(1.0.interpolate(2.0, t: 1), 2)
+        XCTAssertEqual(1.0.interpolate(2.0, t: 0.5), 1.5)
+
         XCTAssert(quickCheck(Gen<vec3>(), Gen<vec3>(), Gen<Float>(), size: 100) { va, vb, c in
             return va.interpolate(vb, t: c) == mix(va, vb, c)
         })
