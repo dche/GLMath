@@ -160,7 +160,10 @@ extension FloatVector2 {
     public static var y: Self { return self.init(0, 1) }
 }
 
-public protocol FloatVector3: FloatVector, Vector3 {
+public protocol FloatVector3: FloatVector, Vector3
+    where
+    AssociatedVector2: FloatVector2
+{
 
     // Generic `cross` method declaration.
     func cross(_ y: Self) -> Self
@@ -173,9 +176,13 @@ extension FloatVector3 {
     public static var z: Self { return self.init(0, 0, 1) }
 }
 
-public protocol FloatVector4: FloatVector, Vector4 {}
+public protocol FloatVector4: FloatVector, Vector4
+    where
+    AssociatedVector2: FloatVector2,
+    AssociatedVector3: FloatVector3
+{}
 
-extension FloatVector where Self: Vector4 {
+extension FloatVector4 {
 
     public static var x: Self { return self.init(1, 0, 0, 0) }
     public static var y: Self { return self.init(0, 1, 0, 0) }
