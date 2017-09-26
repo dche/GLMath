@@ -35,13 +35,6 @@ extension ApproxEquatable {
     }
 }
 
-public protocol Interpolatable {
-
-    associatedtype InterpolatableNumber: FloatingPoint
-
-    func interpolate(_ y: Self, t: InterpolatableNumber) -> Self
-}
-
 /// Generic floating point number type that applies to both scalar and
 /// vector numbers.
 public protocol GenericFloat: GenericSignedNumber, ApproxEquatable, Interpolatable {
@@ -114,9 +107,7 @@ extension Double: BaseFloat {
 /// Float number vector.
 public protocol FloatVector: NumericVector, GenericFloat
     where
-    Component: BaseFloat,
-    InexactNumber == Component,
-    InterpolatableNumber == Component
+    Component: BaseFloat
 {
     var length: Component { get }
     var normalize: Self { get }
@@ -127,7 +118,7 @@ public protocol FloatVector: NumericVector, GenericFloat
     func smoothstep(_ edge0: Self, _ edge1: Self) -> Self
 }
 
-extension FloatVector {
+extension FloatVector where Component == InexactNumber {
 
     public func isClose(
         to other: Self,
@@ -140,6 +131,9 @@ extension FloatVector {
         }
         return true
     }
+}
+
+extension FloatVector where Component == InterpolatableNumber {
 
     public func interpolate(_ y: Self, t: Component) -> Self {
         return self.mix(y, t: Self(t))

@@ -6,10 +6,10 @@
 // Copyright (c) 2017 The GLMath authors.
 // Licensed under MIT License.
 
-public protocol BoolVector: Vector where Component == Bool {}
+public struct bvec2: Vector2 {
 
-public struct bvec2: Vector2, BoolVector {
-
+    public typealias Dim = Dimension2
+    public typealias Component = Bool
     public typealias ArrayLiteralElement = Bool
 
     public var x, y: Bool
@@ -26,10 +26,12 @@ public struct bvec2: Vector2, BoolVector {
     }
 }
 
-public struct bvec3: Vector3, BoolVector {
+public struct bvec3: Vector3 {
 
-    public typealias ArrayLiteralElement = Bool
+    public typealias Dim = Dimension3
+    public typealias Component = Bool
     public typealias AssociatedVector2 = bvec2
+    public typealias ArrayLiteralElement = Bool
 
     public var x, y, z: Bool
 
@@ -49,11 +51,13 @@ public struct bvec3: Vector3, BoolVector {
     }
 }
 
-public struct bvec4: Vector4, BoolVector {
+public struct bvec4: Vector4 {
 
-    public typealias ArrayLiteralElement = Bool
+    public typealias Dim = Dimension4
+    public typealias Component = Bool
     public typealias AssociatedVector2 = bvec2
     public typealias AssociatedVector3 = bvec3
+    public typealias ArrayLiteralElement = Bool
 
     public var x, y, z, w: Bool
 

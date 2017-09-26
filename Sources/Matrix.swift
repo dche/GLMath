@@ -11,8 +11,7 @@
 /// A matrix is treated as vector of vectors of float number.
 public protocol GenericMatrix: Vector, ApproxEquatable
     where
-    Component: FloatVector,
-    InexactNumber == Component.InexactNumber
+    Component: FloatVector
 {
     subscript (column: Int, row: Int) -> Component.Component { get }
 
@@ -52,7 +51,7 @@ public extension GenericMatrix {
     }
 }
 
-extension GenericMatrix {
+extension GenericMatrix where InexactNumber == Component.InexactNumber {
 
     public func isClose(to: Self, tolerance: Self.InexactNumber) -> Bool {
         for i in 0 ..< Self.dimension {

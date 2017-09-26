@@ -10,9 +10,6 @@
 
 // TODO: Swizzle properties shall be settable.
 
-// SWIFT EVOLUTION: `Component` equality constriant should be able to
-//                  expressed on associated types declaration.
-
 public extension Vector2 {
 
     var r: Component { return self.x }
@@ -25,9 +22,7 @@ public extension Vector2 {
     % end
 }
 
-public extension Vector3
-where Self.AssociatedVector2.Component == Self.Component {
-
+public extension Vector3 {
     var r: Component { return self.x }
     var g: Component { return self.y }
     var b: Component { return self.z }
@@ -42,11 +37,7 @@ where Self.AssociatedVector2.Component == Self.Component {
     % end
 }
 
-public extension Vector4
-where
-Self.AssociatedVector2.Component == Self.Component,
-Self.AssociatedVector3.Component == Self.Component {
-
+public extension Vector4 {
     var r: Component { return self.x }
     var g: Component { return self.y }
     var b: Component { return self.z }

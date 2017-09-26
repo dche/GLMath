@@ -11,7 +11,10 @@
 import Glibc
 
 /// Returns `x`` if `x >= 0`, otherwise it returns `–x`.
-public func abs<T: NumericVector>(_ x: T) -> T where T.Component: SignedNumber {
+public func abs<T: NumericVector>(_ x: T) -> T
+    where
+    T.Component: SignedNumeric & Comparable
+{
     return x.map(abs)
 }
 

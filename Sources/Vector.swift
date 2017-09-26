@@ -170,7 +170,10 @@ public extension Vector2 {
 }
 
 /// Generic type for vectors with `3` components.
-public protocol Vector3: Vector {
+public protocol Vector3: Vector
+    where
+    Component == AssociatedVector2.Component
+{
 
     associatedtype Dim = Dimension3
 
@@ -194,23 +197,11 @@ public extension Vector3 {
         self.init(x, x, x)
     }
 
-    init
-    <
-        T: Vector2
-    >(_ xy: T, _ z: Component)
-        where
-        T.Component == Self.Component
-    {
+    init (_ xy: AssociatedVector2, _ z: Component) {
         self.init(xy.x, xy.y, z)
     }
 
-    init
-    <
-        T: Vector2
-    >(_ x: Component, _ yz: T)
-        where
-        T.Component == Self.Component
-    {
+    init (_ x: Component, _ yz: AssociatedVector2) {
         self.init(x, yz.x, yz.y)
     }
 
@@ -261,7 +252,11 @@ public extension Vector3 {
 }
 
 /// Generic type for vectors with `4` components.
-public protocol Vector4: Vector {
+public protocol Vector4: Vector
+    where
+    Component == AssociatedVector2.Component,
+    Component == AssociatedVector3.Component
+{
 
     associatedtype Dim = Dimension4
 
@@ -290,63 +285,27 @@ public extension Vector4 {
         self.init(x, x, x, x)
     }
 
-    init
-    <
-        T: Vector3
-    >(_ xyz: T, _ w: Component)
-        where
-        T.Component == Self.Component
-    {
+    init (_ xyz: AssociatedVector3, _ w: Component) {
         self.init(xyz.x, xyz.y, xyz.z, w)
     }
 
-    init
-    <
-        T: Vector3
-    >(_ x: Component, _ yzw: T)
-        where
-        T.Component == Self.Component
-    {
+    init (_ x: Component, _ yzw: AssociatedVector3) {
         self.init(x, yzw.x, yzw.y, yzw.z)
     }
 
-    init
-    <
-        T: Vector2
-    >(_ xy: T, _ zw: T)
-        where
-        T.Component == Self.Component
-    {
+    init (_ xy: AssociatedVector2, _ zw: AssociatedVector2) {
         self.init(xy.x, xy.y, zw.x, zw.y)
     }
 
-    init
-    <
-        T: Vector2
-    >(_ xy: T, _ z: Component, _ w: Component)
-        where
-        T.Component == Self.Component
-    {
+    init (_ xy: AssociatedVector2, _ z: Component, _ w: Component) {
         self.init(xy.x, xy.y, z, w)
     }
 
-    init
-    <
-        T: Vector2
-    >(_ x: Component, _ y: Component, _ zw: T)
-        where
-        T.Component == Self.Component
-    {
+    init (_ x: Component, _ y: Component, _ zw: AssociatedVector2) {
         self.init(x, y, zw.x, zw.y)
     }
 
-    init
-    <
-        T: Vector2
-    >(_ x: Component, _ yz: T, _ w: Component)
-        where
-        T.Component == Self.Component
-    {
+    init (_ x: Component, _ yz: AssociatedVector2, _ w: Component) {
         self.init(x, yz.x, yz.y, w)
     }
 

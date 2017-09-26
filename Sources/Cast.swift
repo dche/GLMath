@@ -20,7 +20,11 @@ extension NumericVector {
     /// let i3 = ivec3(b3)
     /// assert(i3.x == 1 && i3.y == 1 && i3.z == 0)
     /// ```
-    public init<T: BoolVector>(_ b: T) where T.Dim == Self.Dim {
+    public init<T: Vector>(_ b: T)
+        where
+        T.Dim == Self.Dim,
+        T.Component == Bool
+    {
         var a = Self(Self.Component.zero)
         for i in 0 ..< T.dimension {
             if b[i] { a[i] = Self.Component.one }
@@ -29,7 +33,7 @@ extension NumericVector {
     }
 }
 
-extension BoolVector {
+extension Vector where Component == Bool {
 
     /// Constructs a boolean vector from a numeric vector with same dimension.
     ///
