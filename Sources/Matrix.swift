@@ -17,6 +17,8 @@ public protocol GenericMatrix: Vector, ApproxEquatable
 
     // NOTE: Property `transpose` can't be defined here, because the result
     //       type can't be expressed on a generic way.
+
+    static func * (lhs: Self, rhs: Component.Component) -> Self
 }
 
 /// Generic type of square matrices.
@@ -36,6 +38,8 @@ public protocol GenericSquareMatrix: GenericMatrix, One, Zero
     var transpose: Self { get }
 
     init (diagonal: Component)
+
+    static func * (lhs: Self, rhs: Component) -> Component
 }
 
 public extension GenericMatrix {
