@@ -8,7 +8,37 @@
 
 import Glibc
 
-public extension Vector2 where Component: Zero {
+extension NumericVector {
+
+    public static func + (lhs: Self, rhs: Self) -> Self {
+        return lhs.zip(rhs, +)
+    }
+
+    public static func * (lhs: Self, rhs: Self) -> Self {
+        return lhs.zip(rhs, *)
+    }
+
+    public static func / (lhs: Self, rhs: Self) -> Self {
+        return lhs.zip(rhs, /)
+    }
+}
+
+extension NumericVector where Component: GenericSignedNumber {
+
+    public var signum: Self {
+        return self.map { $0.signum }
+    }
+
+    public static prefix func - (op: Self) -> Self {
+        return op.map(-)
+    }
+
+    public static func - (lhs: Self, rhs: Self) -> Self {
+        return lhs.zip(rhs, -)
+    }
+}
+
+extension Vector2 where Component: Zero {
 
     public init (_ components: [Component]) {
         let x = components.count > 0 ? components[0] : Component.zero
@@ -17,7 +47,7 @@ public extension Vector2 where Component: Zero {
     }
 }
 
-public extension Vector3 where Component: Zero {
+extension Vector3 where Component: Zero {
 
     public init (_ components: [Component]) {
         let x = components.count > 0 ? components[0] : Component.zero
@@ -27,7 +57,7 @@ public extension Vector3 where Component: Zero {
     }
 }
 
-public extension Vector4 where Component: Zero {
+extension Vector4 where Component: Zero {
 
     public init (_ components: [Component]) {
         let x = components.count > 0 ? components[0] : Component.zero
@@ -99,6 +129,7 @@ public typealias ivec4 = IVec4<Int32>
 // MARK: Float point.
 
 extension BaseFloat {
+
     public func step(_ edge: Self) -> Self {
         if self < edge { return .zero }
         return .one
@@ -107,77 +138,70 @@ extension BaseFloat {
 
 extension Float {
 
-    public var sin: Float { return Glibc.sinf(self) }
-    public var cos: Float { return Glibc.cosf(self) }
-    public var acos: Float { return Glibc.acosf(self) }
     public var fract: Float {
         return self - Glibc.floorf(self)
     }
+    public var recip: Float {
+        return 1.0 / self
+    }
+    public var rsqrt: Float {
+        return 1.0 / Glibc.sqrtf(self)
+    }
+
+    public var sin: Float { return Glibc.sinf(self) }
+    public var cos: Float { return Glibc.cosf(self) }
+    public var acos: Float { return Glibc.acosf(self) }
+    public var sqrt: Float { return Glibc.sqrtf(self) }
     public var frexp: (Float, Int) {
         var exp: Int32 = 0
         let frac = Glibc.frexpf(self, &exp)
         return (frac, Int(exp))
     }
-    public var recip: Float {
-        return 1.0 / self
-    }
-    public var sqrt: Float {
-        return Glibc.sqrt(self)
-    }
-    public var rsqrt: Float {
-        return 1.0 / Glibc.sqrtf(self)
-    }
+
     public func ldexp(_ exp: Int) -> Float {
         return Glibc.ldexpf(self, Int32(exp))
-    }
-    public func pow(_ exp: Float) -> Float {
-        return Glibc.powf(self, exp)
     }
 }
 
 extension Double {
 
-    public var sin: Double { return Glibc.sin(self) }
-    public var cos: Double { return Glibc.cos(self) }
-    public var acos: Double { return Glibc.acos(self) }
     public var fract: Double {
         return self - Glibc.floor(self)
     }
+    public var recip: Double {
+        return 1.0 / self
+    }
+    public var rsqrt: Double {
+        return 1.0 / Glibc.sqrt(self)
+    }
+
+    public var sin: Double { return Glibc.sin(self) }
+    public var cos: Double { return Glibc.cos(self) }
+    public var acos: Double { return Glibc.acos(self) }
+    public var sqrt: Double { return Glibc.sqrt(self) }
     public var frexp: (Double, Int) {
         var exp: Int32 = 0
         let frac = Glibc.frexp(self, &exp)
         return (frac, Int(exp))
     }
-    public var recip: Double {
-        return 1.0 / self
-    }
-    public var sqrt: Double {
-        return Glibc.sqrt(self)
-    }
-    public var rsqrt: Double {
-        return 1.0 / Glibc.sqrt(self)
-    }
+
     public func ldexp(_ exp: Int) -> Double {
         return Glibc.ldexp(self, Int32(exp))
-    }
-    public func pow(_ exp: Double) -> Double {
-        return Glibc.pow(self, exp)
     }
 }
 
 extension FloatVector {
 
-    public var fract: Self {
-        return self.map { $0.fract }
+    public var fract: Self { return self.map { $0.fract } }
+    public var recip: Self { return self.map { $0.recip } }
+    public var rsqrt: Self { return self.map { $0.rsqrt } }
+
+    public func step(_ edge: Self) -> Self {
+        return self.zip(edge) { $0.step($1) }
     }
-    public var recip: Self {
-        return self.map { $0.recip }
-    }
-    public var rsqrt: Self {
-        return self.map { $0.rsqrt }
-    }
+
     public var length: Component {
-        return self.dot(self)
+        return self.dot(self).sqrt
     }
     public var normalize: Self {
         let sqlen = self.dot(self)
@@ -191,23 +215,12 @@ extension FloatVector {
     public func mix(_ other: Self, t: Self) -> Self {
         return self * (Self.one - t) + other * t
     }
-    public func step(_ edge: Self) -> Self {
-        return edge.zip(self) { $0.step($1) }
-    }
     public func smoothstep(_ edge0: Self, _ edge1: Self) -> Self {
         let t0: Self = (self - edge0) / (edge1 - edge0)
         let t: Self = t0.map {
             $0 < 0 ? 0 : ($0 > 1 ? 1 : $0)
         }
         return t * t * (t * -2 + 3)
-    }
-
-    public static prefix func - (op: Self) -> Self {
-        return op.map(-)
-    }
-
-    public static func - (lhs: Self, rhs: Self) -> Self {
-        return lhs.zip(rhs, -)
     }
 }
 
@@ -252,7 +265,10 @@ public struct Vec3<T: BaseFloat>: FloatVector3 {
     }
 
     public func dot(_ other: Vec3<T>) -> T {
-        return self.x * other.x + self.y * other.y + self.z * other.z + self._w * other._w
+        let x = self.x * other.x
+        let y = self.y * other.y
+        let z = self.z * other.z
+        return x + y + z
     }
 
     public func cross(_ other: Vec3<T>) -> Vec3<T> {
@@ -320,6 +336,10 @@ extension GenericMatrix {
     public static func - (lhs: Self, rhs: Self) -> Self {
         return lhs.zip(rhs, -)
     }
+
+    public static func * (lhs: Self, rhs: Self.Component.Component) -> Self {
+        return lhs.map { $0.map { $0 * rhs } }
+    }
 }
 
 public struct Mat2x2<T: BaseFloat>: Vector2, GenericSquareMatrix {
@@ -365,8 +385,8 @@ public struct Mat2<T: FloatVector>: Vector2, GenericMatrix {
 
     public typealias Component = T
     public typealias Dim = Dimension2
-    public typealias InexactNumber = T
-    public typealias InterpolatableNumber = T
+    public typealias InexactNumber = T.Component
+    public typealias InterpolatableNumber = T.Component
 
     public var x, y: T
 
@@ -413,9 +433,12 @@ public struct Mat3x3<T: BaseFloat>: Vector3, GenericSquareMatrix {
     }
 
     public var determinant: T {
-        let x: T = self.x.x * (self.y.y * self.z.z - self.z.y * self.y.z)
-        let y: T = self.y.x * (self.x.y * self.z.z - self.z.y * self.x.z)
-        let z: T = self.z.x * (self.x.y * self.y.z - self.y.y * self.x.z)
+        let a = self.y.y * self.z.z - self.z.y * self.y.z
+        let x: T = self.x.x * a
+        let b = self.x.y * self.z.z - self.z.y * self.x.z
+        let y: T = self.y.x * b
+        let c = self.x.y * self.y.z - self.y.y * self.x.z
+        let z: T = self.z.x * c
         return  x - y + z
     }
 
@@ -449,8 +472,8 @@ public struct Mat3<T: FloatVector>: Vector3, GenericMatrix {
     public typealias Component = T
     public typealias Dim = Dimension3
     public typealias AssociatedVector2 = Mat2<T>
-    public typealias InexactNumber = T
-    public typealias InterpolatableNumber = T
+    public typealias InexactNumber = T.Component
+    public typealias InterpolatableNumber = T.Component
 
     public var x, y, z: T
 
@@ -502,15 +525,15 @@ public struct Mat4x4<T: BaseFloat>: Vector4, GenericSquareMatrix {
     }
 
     public var determinant: T {
-        // NOTE: SWIFT compiler (circa 3.0.2) can't handle complex expressions.
-        var n0, n1, n2, n3, n4, n5: T
+        var n0, n1, n2, n3, n4, n5, n6: T
         n0 = self.y.y * self.z.z * self.w.w
         n1 = self.z.y * self.w.z * self.y.w
         n2 = self.w.y * self.y.z * self.z.w
         n3 = self.w.y * self.z.z * self.y.w
         n4 = self.y.y * self.w.z * self.z.w
         n5 = self.z.y * self.y.z * self.w.w
-        let x: T = self.x.x * (n0 + n1 + n2 - n3 - n4 - n5)
+        n6 = n0 + n1 + n2 - n3 - n4 - n5
+        let x: T = self.x.x * n6
 
         n0 = self.x.y * self.z.z * self.w.w
         n1 = self.z.y * self.w.z * self.x.w
@@ -518,7 +541,8 @@ public struct Mat4x4<T: BaseFloat>: Vector4, GenericSquareMatrix {
         n3 = self.w.y * self.z.z * self.x.w
         n4 = self.x.y * self.w.z * self.z.w
         n5 = self.z.y * self.x.z * self.w.w
-        let y: T = self.y.x * (n0 + n1 + n2 - n3 - n4 - n5)
+        n6 = n0 + n1 + n2 - n3 - n4 - n5
+        let y: T = self.y.x * n6
 
         n0 = self.x.y * self.y.z * self.w.w
         n1 = self.y.y * self.w.z * self.x.w
@@ -526,7 +550,8 @@ public struct Mat4x4<T: BaseFloat>: Vector4, GenericSquareMatrix {
         n3 = self.w.y * self.y.z * self.x.w
         n4 = self.x.y * self.w.z * self.y.w
         n5 = self.y.y * self.x.z * self.w.w
-        let z: T = self.z.x * (n0 + n1 + n2 - n3 - n4 - n5)
+        n6 = n0 + n1 + n2 - n3 - n4 - n5
+        let z: T = self.z.x * n6
 
         n0 = self.x.y * self.y.z * self.z.w
         n1 = self.y.y * self.z.z * self.x.w
@@ -534,7 +559,8 @@ public struct Mat4x4<T: BaseFloat>: Vector4, GenericSquareMatrix {
         n3 = self.z.y * self.y.z * self.x.w
         n4 = self.x.y * self.z.z * self.y.w
         n5 = self.y.y * self.x.z * self.z.w
-        let w: T = self.w.x * (n0 + n1 + n2 - n3 - n4 - n5)
+        n6 = n0 + n1 + n2 - n3 - n4 - n5
+        let w: T = self.w.x * n6
         return x - y + z - w
     }
 
@@ -588,8 +614,8 @@ public struct Mat4<T: FloatVector>: Vector4, GenericMatrix {
     public typealias Dim = Dimension4
     public typealias AssociatedVector2 = Mat2<T>
     public typealias AssociatedVector3 = Mat3<T>
-    public typealias InexactNumber = T
-    public typealias InterpolatableNumber = T
+    public typealias InexactNumber = T.Component
+    public typealias InterpolatableNumber = T.Component
 
     public var x, y, z, w: T
 

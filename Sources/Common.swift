@@ -13,9 +13,16 @@ import Glibc
 /// Returns `x`` if `x >= 0`, otherwise it returns `–x`.
 public func abs<T: NumericVector>(_ x: T) -> T
     where
-    T.Component: SignedNumeric & Comparable
+    T.Component: SignedNumeric
 {
     return x.map(abs)
+}
+
+/// Returns `1.0` if `x > 0`, `0.0` if `x = 0`, or `–1.0` if `x < 0`.
+public func sign<T: IntVector>(_ x: T) -> T where T.Component: GenericSignedNumber {
+    // FIXME: This function is a workaround for the bug in Linux.swift that
+    // ivec{2,3,4} are not `GenericSignedNumber`.
+    return x.signum
 }
 
 /// Returns `1.0`` if `x > 0`, `0.0` if `x = 0`, or `–1.0`` if `x < 0`.
@@ -29,7 +36,7 @@ public func sign<T: BaseFloat>(_ x: T) -> T {
 
 /// Returns `1.0`` if `x > 0`, `0.0` if `x = 0`, or `–1.0`` if `x < 0`.
 public func sign<T: FloatVector>(_ x: T) -> T {
-    return x.map(sign)
+    return x.signum
 }
 
 /// Returns a value equal to the nearest integer that is less than or equal to

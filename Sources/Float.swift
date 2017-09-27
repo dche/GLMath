@@ -55,6 +55,7 @@ public protocol BaseFloat: BaseNumber, GenericFloat, BinaryFloatingPoint
     var sin: Self { get }
     var cos: Self { get }
     var acos: Self { get }
+    var sqrt: Self { get }
 
     var frexp: (Self, Int) { get }
     func ldexp(_ exp: Int) -> Self
@@ -107,7 +108,8 @@ extension Double: BaseFloat {
 /// Float number vector.
 public protocol FloatVector: NumericVector, GenericFloat
     where
-    Component: BaseFloat
+    Component: BaseFloat,
+    Component == InexactNumber
 {
     var length: Component { get }
     var normalize: Self { get }
@@ -118,7 +120,7 @@ public protocol FloatVector: NumericVector, GenericFloat
     func smoothstep(_ edge0: Self, _ edge1: Self) -> Self
 }
 
-extension FloatVector where Component == InexactNumber {
+extension FloatVector {
 
     public func isClose(
         to other: Self,
@@ -148,7 +150,9 @@ extension FloatVector where Component == InterpolatableNumber {
         let a = (theta - t * theta).sin
         let b = (t * theta).sin
         let c = (theta).sin.recip
-        return self * a * c + y * b * c
+        let d = self * a
+        let e = y * b
+        return (d + e) * c
     }
 }
 

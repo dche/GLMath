@@ -38,10 +38,3 @@ extension UInt32: BaseInt {
 }
 
 public protocol IntVector: NumericVector where Component: BaseInt {}
-
-extension IntVector where Component: GenericSignedNumber {
-
-    public var signum: Self {
-        return self.map { $0.signum }
-    }
-}

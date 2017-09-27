@@ -93,6 +93,16 @@ extension uint4: IntVector, Vector4 {
     }
 }
 
+extension IntVector
+    where
+    Self: GenericSignedNumber,
+    Component: GenericSignedNumber
+{
+    public var signum: Self {
+        return self.map { $0.signum }
+    }
+}
+
 public typealias ivec2 = int2
 
 extension int2: IntVector, Vector2, GenericSignedNumber {
@@ -191,6 +201,7 @@ extension Float {
     public var sin: Float { return Darwin.sin(self) }
     public var cos: Float { return Darwin.cos(self) }
     public var acos: Float { return Darwin.acos(self) }
+    public var sqrt: Float { return Darwin.sqrt(self) }
     public var frexp: (Float, Int) { return simd.frexp(self) }
 
     public func ldexp(_ exp: Int) -> Float {
@@ -210,6 +221,7 @@ extension Double {
     public var sin: Double { return Darwin.sin(self) }
     public var cos: Double { return Darwin.cos(self) }
     public var acos: Double { return Darwin.acos(self) }
+    public var sqrt: Double { return Darwin.sqrt(self) }
     public var frexp: (Double, Int) { return simd.frexp(self) }
 
     public func ldexp(_ exp: Int) -> Double {
