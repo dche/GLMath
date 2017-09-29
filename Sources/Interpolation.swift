@@ -8,7 +8,7 @@
 
 public protocol Interpolatable {
 
-    associatedtype InterpolatableNumber: FloatingPoint
+    associatedtype InterpolatableNumber: BinaryFloatingPoint
 
     /// Linear interplation between the receiver and `y` with parameter `t`.
     ///
