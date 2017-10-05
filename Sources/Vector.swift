@@ -360,7 +360,13 @@ public extension Vector4 {
 }
 
 /// Generic number vector type.
-public protocol NumericVector: GenericNumber, Vector where Component: BaseNumber {
+public protocol NumericVector: GenericNumber, Vector
+    where
+    Component: BaseNumber,
+    AssociatedBooleanVector.Component == Bool,
+    AssociatedBooleanVector.Dim == Self.Dim
+{
+    associatedtype AssociatedBooleanVector: Vector
 
     static func + (lhs: Self, rhs: Component) -> Self
 

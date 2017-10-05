@@ -20,6 +20,7 @@ extension uint2: IntVector, Vector2 {
 
     public typealias Dim = Dimension2
     public typealias Component = UInt32
+    public typealias AssociatedBooleanVector = bvec2
 
     public static func + (lhs: uint2, rhs: uint2) -> uint2 {
         return lhs &+ rhs
@@ -49,6 +50,7 @@ extension uint3: IntVector, Vector3 {
     public typealias Dim = Dimension3
     public typealias Component = UInt32
     public typealias AssociatedVector2 = uvec2
+    public typealias AssociatedBooleanVector = bvec3
 
     public static func + (lhs: uint3, rhs: uint3) -> uint3 {
         return lhs &+ rhs
@@ -75,6 +77,7 @@ extension uint4: IntVector, Vector4 {
     public typealias Component = UInt32
     public typealias AssociatedVector2 = uvec2
     public typealias AssociatedVector3 = uvec3
+    public typealias AssociatedBooleanVector = bvec4
 
     public static func + (lhs: uint4, rhs: uint4) -> uint4 {
         return lhs &+ rhs
@@ -109,6 +112,7 @@ extension int2: IntVector, Vector2, GenericSignedNumber {
 
     public typealias Dim = Dimension2
     public typealias Component = Int32
+    public typealias AssociatedBooleanVector = bvec2
 
     public static func + (lhs: int2, rhs: int2) -> int2 {
         return lhs &+ rhs
@@ -138,6 +142,7 @@ extension int3: IntVector, Vector3, GenericSignedNumber {
     public typealias Dim = Dimension3
     public typealias Component = Int32
     public typealias AssociatedVector2 = int2
+    public typealias AssociatedBooleanVector = bvec3
 
     public static func + (lhs: int3, rhs: int3) -> int3 {
         return lhs &+ rhs
@@ -168,6 +173,7 @@ extension int4: IntVector, Vector4, GenericSignedNumber {
     public typealias Component = Int32
     public typealias AssociatedVector2 = int2
     public typealias AssociatedVector3 = int3
+    public typealias AssociatedBooleanVector = bvec4
 
     public static func + (lhs: int4, rhs: int4) -> int4 {
         return lhs &+ rhs
@@ -238,6 +244,7 @@ extension float2: FloatVector2 {
 
     public typealias Dim = Dimension2
     public typealias Component = Float
+    public typealias AssociatedBooleanVector = bvec2
     public typealias InexactNumber = Float
     public typealias InterpolatableNumber = Float
 
@@ -275,6 +282,7 @@ extension float3: FloatVector3 {
     public typealias Dim = Dimension3
     public typealias Component = Float
     public typealias AssociatedVector2 = float2
+    public typealias AssociatedBooleanVector = bvec3
     public typealias InexactNumber = Float
     public typealias InterpolatableNumber = Float
 
@@ -316,6 +324,7 @@ extension float4: FloatVector4 {
     public typealias Component = Float
     public typealias AssociatedVector2 = float2
     public typealias AssociatedVector3 = float3
+    public typealias AssociatedBooleanVector = bvec4
     public typealias InexactNumber = Float
     public typealias InterpolatableNumber = Float
 
@@ -352,6 +361,7 @@ extension double2: FloatVector2 {
 
     public typealias Dim = Dimension2
     public typealias Component = Double
+    public typealias AssociatedBooleanVector = bvec2
     public typealias InexactNumber = Double
     public typealias InterpolatableNumber = Double
 
@@ -389,6 +399,7 @@ extension double3: FloatVector3 {
     public typealias Dim = Dimension3
     public typealias Component = Double
     public typealias AssociatedVector2 = double2
+    public typealias AssociatedBooleanVector = bvec3
     public typealias InexactNumber = Double
     public typealias InterpolatableNumber = Double
 
@@ -430,6 +441,7 @@ extension double4: FloatVector4 {
     public typealias Component = Double
     public typealias AssociatedVector2 = double2
     public typealias AssociatedVector3 = double3
+    public typealias AssociatedBooleanVector = bvec4
     public typealias InexactNumber = Double
     public typealias InterpolatableNumber = Double
 

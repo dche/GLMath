@@ -47,7 +47,7 @@ public protocol GenericFloat: GenericSignedNumber, ApproxEquatable, Interpolatab
 }
 
 /// Type for primitive floating point types. Adopted by `Float` and `Double`.
-public protocol BaseFloat: BaseNumber, GenericFloat
+public protocol BaseFloat: BaseNumber, GenericFloat, BinaryFloatingPoint
     where
     InexactNumber == Self,
     InterpolatableNumber == Self

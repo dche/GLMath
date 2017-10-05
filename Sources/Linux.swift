@@ -74,6 +74,7 @@ public struct IVec2<T: BaseInt>: IntVector, Vector2 {
 
     public typealias Dim = Dimension2
     public typealias Component = T
+    public typealias AssociatedBooleanVector = bvec2
 
     public var x, y: T
 
@@ -91,6 +92,7 @@ public struct IVec3<T: BaseInt>: IntVector, Vector3 {
     public typealias Dim = Dimension3
     public typealias Component = T
     public typealias AssociatedVector2 = IVec2<T>
+    public typealias AssociatedBooleanVector = bvec3
 
     public var x, y, z: T
 
@@ -112,6 +114,7 @@ public struct IVec4<T: BaseInt>: IntVector, Vector4 {
     public typealias Component = T
     public typealias AssociatedVector2 = IVec2<T>
     public typealias AssociatedVector3 = IVec3<T>
+    public typealias AssociatedBooleanVector = bvec4
 
     public var x, y, z, w: T
 
@@ -228,6 +231,7 @@ public struct Vec2<T: BaseFloat>: FloatVector2 {
 
     public typealias Dim = Dimension2
     public typealias Component = T
+    public typealias AssociatedBooleanVector = bvec2
     public typealias InexactNumber = T
     public typealias InterpolatableNumber = T
 
@@ -253,6 +257,7 @@ public struct Vec3<T: BaseFloat>: FloatVector3 {
     public typealias InexactNumber = T
     public typealias InterpolatableNumber = T
     public typealias AssociatedVector2 = Vec2<T>
+    public typealias AssociatedBooleanVector = bvec3
 
     public var x, y, z: T
 
@@ -290,6 +295,7 @@ public struct Vec4<T: BaseFloat>: FloatVector4 {
     public typealias InterpolatableNumber = T
     public typealias AssociatedVector2 = Vec2<T>
     public typealias AssociatedVector3 = Vec3<T>
+    public typealias AssociatedBooleanVector = bvec4
 
     public var x, y, z, w: T
 
