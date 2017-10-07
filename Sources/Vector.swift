@@ -174,7 +174,6 @@ public protocol Vector3: Vector
     where
     Component == AssociatedVector2.Component
 {
-
     associatedtype Dim = Dimension3
 
     associatedtype AssociatedVector2: Vector2
@@ -257,7 +256,6 @@ public protocol Vector4: Vector
     Component == AssociatedVector2.Component,
     Component == AssociatedVector3.Component
 {
-
     associatedtype Dim = Dimension4
 
     associatedtype AssociatedVector2: Vector2
@@ -457,5 +455,16 @@ extension NumericVector {
 
     public var max: Component {
         return reduce { $1 > $0 ? $1 : $0 }
+    }
+}
+
+extension NumericVector where Self: GenericSignedNumber {
+
+    public static func - (lhs: Self, rhs: Component) -> Self {
+        return lhs - Self.init(rhs)
+    }
+
+    public static func - (lhs: Component, rhs: Self) -> Self {
+        return Self.init(lhs) - rhs
     }
 }

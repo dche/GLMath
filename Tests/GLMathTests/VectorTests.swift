@@ -33,4 +33,10 @@ class VectorTests: XCTestCase {
         let v8 = uvec4(8, v3)
         XCTAssertEqual(v8, uvec4(8, 2, 3, 3))
     }
+
+    func testMinusVS() {
+        let v0 = vec3(1,2,3)
+        XCTAssertEqual(v0 - 1, vec3(0,1,2))
+        XCTAssertEqual(4 - v0, vec3(3,2,1))
+    }
 }

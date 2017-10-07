@@ -26,7 +26,6 @@ public protocol GenericSquareMatrix: GenericMatrix, One, Zero
     where
     Dim == Component.Dim
 {
-
     static var identity: Self { get }
 
     /// Returns the inverse of the receiver.
